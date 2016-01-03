@@ -11,7 +11,7 @@ BamFileReader::~BamFileReader()
     //dtor
 }
 AnimatedActor * BamFileReader::loadFile(const char filepath[])
-{
+{ 
 unsigned int i,j;
 std::ifstream file;
 file.open(filepath,std::ios::in | std::ios::binary);

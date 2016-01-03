@@ -13,6 +13,7 @@
 #include "BoneFrameMatrix.h"
 #include "AnimatedActor.h"
 #include "Config.h"
+#include "Renderer.h"
 namespace engine{
 
 
@@ -25,6 +26,7 @@ class BamFileReader
         virtual ~BamFileReader();
         AnimatedActor * loadFile(const char filepath[]);
 		Entity * loadNoBoneFile(const char filepath[]);
+		unsigned int loadScene(const char filepath[], Renderer * renderer);
     protected:
     private:
 };

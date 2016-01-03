@@ -369,4 +369,55 @@ Entity * BamFileReader::loadNoBoneFile(const char filepath[])
 	}*/
 
 }
+
+
+unsigned int BamFileReader::loadScene(const char filepath[], Renderer * renderer){
+	typedef struct ObjectTreeElement{
+		unsigned char id;
+		unsigned char * childrenIds;
+		unsigned char childrenCount;
+	};
+	std::ifstream file;
+	file.open(filepath, std::ios::in | std::ios::binary);
+	if (file.is_open()) std::cout << "otwarto plik " << filepath << std::endl;
+
+	unsigned char * objectCount = new unsigned char;
+	file.read((char *)objectCount, sizeof(unsigned char));
+
+	struct ObjectTreeElement * objectTree = new struct ObjectTreeElement[*objectCount];
+	for (int i = 0; i < *objectCount; i++){
+		unsigned char objectId = 0;
+		file.read((char *)&objectId, sizeof(unsigned char));
+		unsigned char childrenCount = 0;
+		file.read((char * )&childrenCount, sizeof(unsigned char));
+		objectTree[objectId].childrenCount = childrenCount;
+		objectTree[objectId].id = objectId;
+		objectTree[objectId].childrenIds = new unsigned char[childrenCount];
+		for (int j = 0; j < childrenCount; j++){
+			unsigned char childId = 0;
+			file.read((char*)&childId, sizeof(unsigned char));
+			objectTree[objectId].childrenIds[j] = childId;
+		}
+	}
+
+
+	std::cout << "objectCount " << (unsigned int)*objectCount << std::endl;
+
+	for (int i = 0; i < *objectCount; i++){
+		std::cout << i << " Has " << objectTree[i].childrenCount << " children: " << std::endl;
+		for (int j = 0; j < objectTree[i].childrenCount; i++){
+			std::cout << objectTree[i].childrenIds[j] << std::endl;
+		}
+	}
+
+
+
+	delete objectCount;
+	delete[] objectTree;
+	for (int i = 0; i < *objectCount; i++){
+		delete[] objectTree[i].childrenIds;
+	}
+	file.close();
+	return *objectCount;
+}
 }

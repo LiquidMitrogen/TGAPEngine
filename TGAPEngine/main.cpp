@@ -43,7 +43,7 @@ int main(){
 	engine::Renderer *mr = new engine::Renderer(mc, mdlight);
 	me.setRenderer(mr);
 
-
+	bam.loadScene("a.bams", NULL);
 	TARGAINFO info;
 	GLubyte * cbit = LoadTGAImage((char *)"nor5.tga", &info, true);
 	engine::Image * cimg = new engine::Image(cbit, info.width, info.height, 1, GL_RGB, TG_FILTER_LINEAR, true);

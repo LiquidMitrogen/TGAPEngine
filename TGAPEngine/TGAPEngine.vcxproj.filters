@@ -190,5 +190,8 @@
     <None Include="vertex.vert">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="reg.py" />
+    <None Include="io_export_scene_bam.py" />
+    <None Include="io_export_bam.py" />
   </ItemGroup>
 </Project>

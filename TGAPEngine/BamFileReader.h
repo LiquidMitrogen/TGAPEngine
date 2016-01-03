@@ -17,17 +17,25 @@
 namespace engine{
 
 
-
+	struct Header{
+		unsigned int id;
+		unsigned char configurationFlags;
+		glm::quat rotation;
+		glm::vec3 location, scale;
+		std::string entityName;
+	};
 
 class BamFileReader
 {
     public:
         BamFileReader();
         virtual ~BamFileReader();
-        AnimatedActor * loadFile(const char filepath[]);
-		Entity * loadNoBoneFile(const char filepath[]);
+        AnimatedActor * loadFile();
+		Entity * loadNoBoneFile();
 		unsigned int loadScene(const char filepath[], Renderer * renderer);
     protected:
+		struct Header loadHeader();
+		std::ifstream file;
     private:
 };
 }

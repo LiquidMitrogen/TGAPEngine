@@ -10,49 +10,13 @@ BamFileReader::~BamFileReader()
 {
     //dtor
 }
-AnimatedActor * BamFileReader::loadFile(const char filepath[])
+AnimatedActor * BamFileReader::loadFile()
 { 
 unsigned int i,j;
-std::ifstream file;
-file.open(filepath,std::ios::in | std::ios::binary);
-if(file.is_open()) std::cout<<"otwarto plik "<<filepath<<std::endl;
-
-unsigned char * configurationFlags = new unsigned char;
-if (DEBUG_MODE == 1){
-	std::cout << "new Bam" << std::endl;
-}
-file.read((char * )configurationFlags,sizeof(unsigned char));
-
 VaoInitData * vaoInit = new VaoInitData;
 if (DEBUG_MODE == 1){
 	std::cout << "new Bam" << std::endl;
 }
-
-unsigned int entityNameLength = 0;
-file.read((char*)&entityNameLength, sizeof(unsigned int));
-char * entityName = new char[entityNameLength + 1];
-file.read(entityName, entityNameLength);
-entityName[entityNameLength] = '\0';
-
-
-
-float * floatQuaternionEnt = new float[4];
-float * floatLocationEnt = new float[3];
-float * floatScaleEnt = new float[3];
-
-//boneStructArray[i].frames[j].quaternion = qm::Quaternion(floatQuaternionTemp[1],floatQuaternionTemp[2],floatQuaternionTemp[3],floatQuaternionTemp[0]);
-
-file.read((char*)floatLocationEnt, sizeof(float) * 3);
-glm::vec3 locationEnt = glm::vec3(floatLocationEnt[0], floatLocationEnt[1], floatLocationEnt[2]);
-
-file.read((char*)floatQuaternionEnt, sizeof(float) * 4);//quat(w,x,y,z)
-glm::quat rotationEnt = glm::quat(floatQuaternionEnt[0], floatQuaternionEnt[1], floatQuaternionEnt[2], floatQuaternionEnt[3]);
-//boneStructArray[i].frames[j].quaternion = qm::Quaternion(floatQuaternionTemp[1],floatQuaternionTemp[2],floatQuaternionTemp[3],floatQuaternionTemp[0]);
-
-file.read((char*)floatScaleEnt, sizeof(float) * 3);
-glm::vec3 scaleEnt = glm::vec3(floatScaleEnt[0], floatScaleEnt[1], floatScaleEnt[2]);
-
-
 
 
 file.read((char *)vaoInit,sizeof(VaoInitData));
@@ -177,12 +141,7 @@ if(boneCount>0){
 }
 //std::cout<<maxFrame<<std::endl;
 AnimatedActor * e = new AnimatedActor(VAO,root,maxFrame);
-e->name = std::string(entityName);
-e->applyTranslation(locationEnt);
-e->applyRotation(rotationEnt);
-e->applyScale(scaleEnt);
-//delete VAO;
-file.close();
+
 for(i=0;i<*boneCount;i++){
         //std::cout<<" i "<<i<<" bptr "<<boneStructArray[i].frames<<std::endl;
     delete boneStructArray[i].childrenIndices; boneStructArray[i].childrenIndices = NULL;
@@ -210,40 +169,10 @@ for(i=0;i<vaoInit->attrNumber;i++){
 
 }
 
-Entity * BamFileReader::loadNoBoneFile(const char filepath[])
+Entity * BamFileReader::loadNoBoneFile()
 {
 	unsigned int i, j;
-	std::ifstream file;
-	file.open(filepath, std::ios::in | std::ios::binary);
-	if (file.is_open()) std::cout << "otwarto plik " << filepath << std::endl;
-
-	unsigned char * configurationFlags = new unsigned char;
-	file.read((char *)configurationFlags, sizeof(unsigned char));
-
-
-	unsigned int entityNameLength = 0;
-	file.read((char*)&entityNameLength, sizeof(unsigned int));
-	char * entityName = new char[entityNameLength + 1];
-	file.read(entityName, entityNameLength);
-	entityName[entityNameLength] = '\0';
-
-
-	float * floatQuaternionEnt = new float[4];
-	float * floatLocationEnt = new float[3];
-	float * floatScaleEnt = new float[3];
-
-	//boneStructArray[i].frames[j].quaternion = qm::Quaternion(floatQuaternionTemp[1],floatQuaternionTemp[2],floatQuaternionTemp[3],floatQuaternionTemp[0]);
-
-	file.read((char*)floatLocationEnt, sizeof(float) * 3);
-	glm::vec3 locationEnt = glm::vec3(floatLocationEnt[0], floatLocationEnt[1], floatLocationEnt[2]);
-
-	file.read((char*)floatQuaternionEnt, sizeof(float) * 4);//quat(w,x,y,z)
-	glm::quat rotationEnt = glm::quat(floatQuaternionEnt[0], floatQuaternionEnt[1], floatQuaternionEnt[2], floatQuaternionEnt[3]);
-	//boneStructArray[i].frames[j].quaternion = qm::Quaternion(floatQuaternionTemp[1],floatQuaternionTemp[2],floatQuaternionTemp[3],floatQuaternionTemp[0]);
-
-	file.read((char*)floatScaleEnt, sizeof(float) * 3);
-	glm::vec3 scaleEnt = glm::vec3(floatScaleEnt[0], floatScaleEnt[1], floatScaleEnt[2]);
-
+	
 	VaoInitData * vaoInit = new VaoInitData;
 
 	file.read((char *)vaoInit, sizeof(VaoInitData));
@@ -337,12 +266,7 @@ Entity * BamFileReader::loadNoBoneFile(const char filepath[])
 	//std::cout<<maxFrame<<std::endl;
 	//AnimatedActor * e = new AnimatedActor(VAO, root, maxFrame);
 	Entity * e = new Entity(VAO);
-	e->name = std::string(entityName);
-	e->applyTranslation(locationEnt);
-	e->applyRotation(rotationEnt);
-	e->applyScale(scaleEnt);
-	//delete VAO;
-	file.close();
+
 	//for (i = 0; i<*boneCount; i++){
 	//	//std::cout<<" i "<<i<<" bptr "<<boneStructArray[i].frames<<std::endl;
 	//	delete boneStructArray[i].childrenIndices; boneStructArray[i].childrenIndices = NULL;
@@ -377,47 +301,116 @@ unsigned int BamFileReader::loadScene(const char filepath[], Renderer * renderer
 		unsigned char * childrenIds;
 		unsigned char childrenCount;
 	};
-	std::ifstream file;
 	file.open(filepath, std::ios::in | std::ios::binary);
 	if (file.is_open()) std::cout << "otwarto plik " << filepath << std::endl;
 
 	unsigned char * objectCount = new unsigned char;
 	file.read((char *)objectCount, sizeof(unsigned char));
-
+	std::cout << "objectCount " << (unsigned int)*objectCount << std::endl;
 	struct ObjectTreeElement * objectTree = new struct ObjectTreeElement[*objectCount];
 	for (int i = 0; i < *objectCount; i++){
 		unsigned char objectId = 0;
 		file.read((char *)&objectId, sizeof(unsigned char));
+		std::cout << "objectId " << (unsigned int)objectId << std::endl;
 		unsigned char childrenCount = 0;
 		file.read((char * )&childrenCount, sizeof(unsigned char));
+		std::cout << "childrenCount " << (unsigned int)childrenCount << std::endl;
 		objectTree[objectId].childrenCount = childrenCount;
 		objectTree[objectId].id = objectId;
-		objectTree[objectId].childrenIds = new unsigned char[childrenCount];
+		if (childrenCount > 0)
+			objectTree[objectId].childrenIds = new unsigned char[childrenCount];
 		for (int j = 0; j < childrenCount; j++){
 			unsigned char childId = 0;
 			file.read((char*)&childId, sizeof(unsigned char));
+			std::cout << "childId " << (unsigned int)childId << std::endl;
 			objectTree[objectId].childrenIds[j] = childId;
 		}
 	}
 
-
-	std::cout << "objectCount " << (unsigned int)*objectCount << std::endl;
+	Entity ** entityArray = new Entity * [*objectCount];
 
 	for (int i = 0; i < *objectCount; i++){
-		std::cout << i << " Has " << objectTree[i].childrenCount << " children: " << std::endl;
-		for (int j = 0; j < objectTree[i].childrenCount; i++){
-			std::cout << objectTree[i].childrenIds[j] << std::endl;
+		struct Header header = this->loadHeader();
+		if (header.configurationFlags & 0x04){//object has no bones
+			entityArray[i] = this->loadNoBoneFile();
+		}
+		else{
+			entityArray[i] = this->loadFile();
+		}
+		entityArray[i]->name = header.entityName;
+		entityArray[i]->buildId = header.id;
+		entityArray[i]->applyTranslation(header.location);
+		entityArray[i]->applyRotation(header.rotation);
+		entityArray[i]->applyScale(header.scale);
+		
+
+	}
+	
+
+	for (int i = 0; i < *objectCount; i++){
+		std::cout << i << " Has " << (unsigned int)objectTree[i].childrenCount << " children: " << std::endl;
+		for (int j = 0; j < objectTree[i].childrenCount; j++){
+			std::cout << (unsigned int)objectTree[i].childrenIds[j] << std::endl;
 		}
 	}
 
 
-
-	delete objectCount;
-	delete[] objectTree;
 	for (int i = 0; i < *objectCount; i++){
-		delete[] objectTree[i].childrenIds;
+		if (objectTree[i].childrenCount > 0)
+			delete[] objectTree[i].childrenIds;
 	}
+	delete[] objectTree;
+	delete objectCount;
+	
+	
 	file.close();
 	return *objectCount;
+}
+
+struct Header BamFileReader::loadHeader(){
+	struct Header header;
+
+	unsigned char * entityId = new unsigned char;
+	file.read((char *)entityId, sizeof(unsigned char));
+
+	unsigned char * configurationFlags = new unsigned char;
+	file.read((char *)configurationFlags, sizeof(unsigned char));
+
+
+	unsigned int entityNameLength = 0;
+	file.read((char*)&entityNameLength, sizeof(unsigned int));
+	char * entityName = new char[entityNameLength + 1];
+	file.read(entityName, entityNameLength);
+	entityName[entityNameLength] = '\0';
+
+
+	float * floatQuaternionEnt = new float[4];
+	float * floatLocationEnt = new float[3];
+	float * floatScaleEnt = new float[3];
+
+	file.read((char*)floatLocationEnt, sizeof(float) * 3);
+	glm::vec3 locationEnt = glm::vec3(floatLocationEnt[0], floatLocationEnt[1], floatLocationEnt[2]);
+
+	file.read((char*)floatQuaternionEnt, sizeof(float) * 4);//quat(w,x,y,z)
+	glm::quat rotationEnt = glm::quat(floatQuaternionEnt[0], floatQuaternionEnt[1], floatQuaternionEnt[2], floatQuaternionEnt[3]);
+
+	file.read((char*)floatScaleEnt, sizeof(float) * 3);
+	glm::vec3 scaleEnt = glm::vec3(floatScaleEnt[0], floatScaleEnt[1], floatScaleEnt[2]);
+
+	header.id = *entityId;
+	header.configurationFlags = *configurationFlags;
+	header.entityName = std::string(entityName);
+	header.location = locationEnt;
+	header.rotation = rotationEnt;
+	header.scale = scaleEnt;
+
+	delete[] floatScaleEnt;
+	delete[] floatLocationEnt;
+	delete[] floatQuaternionEnt;
+	delete[] entityName;
+	delete configurationFlags;
+	delete entityId;
+
+	return header;
 }
 }

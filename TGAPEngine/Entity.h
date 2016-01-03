@@ -21,6 +21,7 @@ namespace engine{
 class Entity
 {
     public:
+		unsigned int buildId = 0;
 		std::string name;
 		bool makesShadow = true;
 		bool disableDepthTests = false;

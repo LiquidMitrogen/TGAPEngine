@@ -397,9 +397,26 @@ struct Header BamFileReader::loadHeader(){
 	file.read((char*)floatScaleEnt, sizeof(float) * 3);
 	glm::vec3 scaleEnt = glm::vec3(floatScaleEnt[0], floatScaleEnt[1], floatScaleEnt[2]);
 
+	unsigned int entityVertexLength = 0;
+	file.read((char*)&entityVertexLength, sizeof(unsigned int));
+	char * entityVertexString = new char[entityVertexLength + 1];
+	if (entityVertexLength > 0)
+		file.read(entityVertexString, entityVertexLength);
+	entityVertexString[entityVertexLength] = '\0';
+
+	unsigned int entityFragmentLength = 0;
+	file.read((char*)&entityFragmentLength, sizeof(unsigned int));
+	char * entityFragmentString = new char[entityFragmentLength + 1];
+	if (entityFragmentLength > 0)
+		file.read(entityFragmentString, entityFragmentLength);
+	entityFragmentString[entityFragmentLength] = '\0';
+
+
 	header.id = *entityId;
 	header.configurationFlags = *configurationFlags;
 	header.entityName = std::string(entityName);
+	header.vertexShaderStr = std::string(entityVertexString);
+	header.fragmentShaderStr = std::string(entityFragmentString);
 	header.location = locationEnt;
 	header.rotation = rotationEnt;
 	header.scale = scaleEnt;
@@ -408,6 +425,8 @@ struct Header BamFileReader::loadHeader(){
 	delete[] floatLocationEnt;
 	delete[] floatQuaternionEnt;
 	delete[] entityName;
+	delete[] entityFragmentString;
+	delete[] entityVertexString;
 	delete configurationFlags;
 	delete entityId;
 

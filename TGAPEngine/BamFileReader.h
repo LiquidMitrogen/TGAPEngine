@@ -22,7 +22,7 @@ namespace engine{
 		unsigned char configurationFlags;
 		glm::quat rotation;
 		glm::vec3 location, scale;
-		std::string entityName;
+		std::string entityName,vertexShaderStr,fragmentShaderStr;
 	};
 
 class BamFileReader

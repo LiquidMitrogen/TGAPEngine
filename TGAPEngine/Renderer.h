@@ -18,6 +18,7 @@
 #include "AnimatedActor.h"
 #include "Window.h"
 #include "DrawingContext.h"
+#include "Scene.h"
 
 //#include "ParticleSystem.h"
 namespace engine{
@@ -26,8 +27,9 @@ namespace engine{
 	public:
 		Renderer(Camera * drawingPassCamera, Light * light);
 		virtual ~Renderer();
-		void addEntity(Entity *e);
-		void removeEntity(Entity *e);
+		//void addEntity(Entity *e);
+		//void removeEntity(Entity *e);
+		void setActiveScene(Scene * scene){ this->activeScene = scene; };
 		//void shadowMapPass();
 		void drawingPass();
 		//void testRender();
@@ -45,7 +47,7 @@ namespace engine{
 		const bool disableSmadowMapping = true;
 
 
-		std::vector<std::unique_ptr<Entity>> entities;
+		Scene * activeScene;
 
 		DrawingContext * context;
 

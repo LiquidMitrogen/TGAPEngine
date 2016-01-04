@@ -295,7 +295,7 @@ Entity * BamFileReader::loadNoBoneFile()
 }
 
 
-unsigned int BamFileReader::loadScene(const char filepath[], Renderer * renderer){
+Scene * BamFileReader::loadScene(const char filepath[], Renderer * renderer){
 	typedef struct ObjectTreeElement{
 		unsigned char id;
 		unsigned char * childrenIds;
@@ -340,12 +340,34 @@ unsigned int BamFileReader::loadScene(const char filepath[], Renderer * renderer
 		entityArray[i]->name = header.entityName;
 		entityArray[i]->buildId = header.id;
 		entityArray[i]->applyTranslation(header.location);
+		std::cout << header.location.x << " " << header.location.y << " " << header.location.z << std::endl;
 		entityArray[i]->applyRotation(header.rotation);
+		std::cout << header.rotation.x << " " << header.rotation.y << " " << header.rotation.z << std::endl;
 		entityArray[i]->applyScale(header.scale);
-		
+		SingleMatrixMaterial * entitymaterial = new SingleMatrixMaterial(header.vertexShaderStr.c_str(), header.fragmentShaderStr.c_str());
+		entityArray[i]->entityMaterial = entitymaterial;
 
 	}
 	
+	for (int i = 0; i < *objectCount; i++){//iteracja po objectTree
+		unsigned int entityArrayId = 0;//pozycja w tablicy gotowego obiejtu o danym id
+		for (int g = 0; g < *objectCount; g++){
+			if (entityArray[g]->buildId == i){
+				entityArrayId = g;
+			}
+		}
+		for (int j = 0; j < objectTree[i].childrenCount; j++){//itaracja po potomkach w objectTree
+			unsigned int childId = objectTree[i].childrenIds[j];
+			for (int k = 0; k < *objectCount; k++){//iteracja po elementach entityArray w celu znalezienia potomka
+				if (entityArray[k]->buildId == childId){//potomek znaleziony ma pozycje k w tabeli
+					entityArray[entityArrayId]->addChild(entityArray[k]);
+					entityArray[k]->setParent(entityArray[entityArrayId]);
+					std::cout << entityArray[entityArrayId]->buildId << " has child " << entityArray[k]->buildId << std::endl;
+				}
+			}
+		}
+	}
+
 
 	for (int i = 0; i < *objectCount; i++){
 		std::cout << i << " Has " << (unsigned int)objectTree[i].childrenCount << " children: " << std::endl;
@@ -354,7 +376,15 @@ unsigned int BamFileReader::loadScene(const char filepath[], Renderer * renderer
 		}
 	}
 
+	Scene * newScene = new Scene();
+	for (int i = 0; i < *objectCount; i++){
+		if (entityArray[i]->getParent() == NULL){
+			newScene->addEntity(entityArray[i]);
+			std::cout << "entity #" << entityArray[i]->buildId << " added to scene" << std::endl;
+		}
+	}
 
+	//cleanup---------------------------------
 	for (int i = 0; i < *objectCount; i++){
 		if (objectTree[i].childrenCount > 0)
 			delete[] objectTree[i].childrenIds;
@@ -364,7 +394,7 @@ unsigned int BamFileReader::loadScene(const char filepath[], Renderer * renderer
 	
 	
 	file.close();
-	return *objectCount;
+	return newScene;
 }
 
 struct Header BamFileReader::loadHeader(){
@@ -415,8 +445,18 @@ struct Header BamFileReader::loadHeader(){
 	header.id = *entityId;
 	header.configurationFlags = *configurationFlags;
 	header.entityName = std::string(entityName);
-	header.vertexShaderStr = std::string(entityVertexString);
-	header.fragmentShaderStr = std::string(entityFragmentString);
+	if (entityVertexLength <= 0){
+		header.vertexShaderStr = std::string("vertex.vert");
+	}
+	else{
+		header.vertexShaderStr = std::string(entityVertexString);
+	}
+	if (entityFragmentLength <= 0){
+		header.fragmentShaderStr = std::string("fragment.frag");
+	}
+	else{
+		header.fragmentShaderStr = std::string(entityFragmentString);
+	}
 	header.location = locationEnt;
 	header.rotation = rotationEnt;
 	header.scale = scaleEnt;

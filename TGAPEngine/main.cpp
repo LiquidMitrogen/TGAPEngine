@@ -14,6 +14,7 @@
 #include "Utility.h"
 #include "TextboxEntity.h"
 #include "ParticleSystem.h"
+#include "Scene.h"
 
 
 
@@ -38,13 +39,13 @@ int main(){
 	engine::BamFileReader bam;
 	engine::MainEngine me(800,600);
 	//engine::Camera * mc = new engine::Camera(glm::perspective(1.182664626f, 9.0f / 6.0f, 1.0f, 750.0f), glm::vec3(1.0f, 0.0f, 15.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	engine::Camera * mc = engine::Camera::perspectiveCamera(1.182664626f, 9.0f / 6.0f, 1.0f, 750.0f, 0.5f, 2.0f, 2.0f, 0.5f, 2.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	engine::Camera * mc = engine::Camera::perspectiveCamera(1.182664626f, 9.0f / 6.0f, 1.0f, 750.0f, 0.5f, 2.0f, 15.0f, 0.5f, 2.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 	engine::Light * mdlight = new engine::Light(1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 10.0f,false);
 	engine::Renderer *mr = new engine::Renderer(mc, mdlight);
 	me.setRenderer(mr);
 
-	bam.loadScene("a.bams", NULL);
-
+	engine::Scene * scene1 = bam.loadScene("wtf.bams", NULL);
+	mr->setActiveScene(scene1);
 
 
 
@@ -173,49 +174,49 @@ int main(){
 ////m.testing();
 //	glfwSetMouseButtonCallback(me.getWindow(), mouseButtCallback);
 //	glm::quat rotationQuat = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-//	double xpos, ypos;
-//	int x, y;
-//	float time = 0;
-//	float tmpsc = 0;
-//	float angle = -(float)M_PI / 200.0f;
-//	double timeS = 0, timeE = 0;
-//	float timePassed = 0;
-//	while (!glfwWindowShouldClose(me.getWindow())){
-//		timePassed = timeE - timeS;
-//		//std::cout << 1 / timePassed << std::endl;
-//		timeS = glfwGetTime();
-//		fps->simulate(timePassed);
-//		//std::cout << fps->getParticleCount() << std::endl;
-//		/*if (time >= 8000){
-//			time = 0;
-//			angle = -angle;
-//		}
-//		tmpsc = (time / 8000) * M_PI * 2;*/
-//		if (mouseDown == true){
-//			mouseDown = false;
-//			glfwGetCursorPos(me.getWindow(), &xpos, &ypos);
-//			glfwGetWindowSize(me.getWindow(), &x, &y);
-//			float xmouse = (xpos / x) * 2 - 1;
-//			float ymouse = -((ypos / y) * 2 - 1);
-//			glm::vec3 mfpl = mc->getMouseOnFarPlaneWorldSpace(xmouse, ymouse);
-//			std::cout << mfpl.x << " " << mfpl.y << " " << mfpl.z << std::endl;
-//			glm::vec3 bonepos = bonePtr->getLocationForFrame(1);
-//			e->applyRotationToBoneAtFrame(bonePtr, 1, glm::inverse(rotationQuat));
-//			rotationQuat = engine::twoVectorsToQuat(glm::normalize(mfpl - bonepos), glm::vec3(0.0f, 0.0f, -1.0f) );
-//			e->applyRotationToBoneAtFrame(bonePtr, 1, rotationQuat);
-//		}
-//		
-//		//mdlight->setLocation(glm::vec4(sin(tmpsc) * 7.0f, 0.0f, cos(tmpsc) * 7.0f, 1.0f));
-//		//e->applyRotation(glm::angleAxis((float)M_PI / 800.0f, glm::vec3(0.0f, 1.0f, 0.0)));
-//		//e->applyRotationToBoneAtFrame(bonePtr, 1, glm::angleAxis(angle, glm::vec3(0.0f, 1.0f, 0.0f)));
-//
-//		me.mainSingleLoop();
-//		//Sleep(33);
-//		timeE = glfwGetTime();
-//		time += timePassed;
-//		
-//	}
-//	//me.mainLoop();
+	double xpos, ypos;
+	int x, y;
+	float time = 0;
+	float tmpsc = 0;
+	float angle = -(float)M_PI / 200.0f;
+	double timeS = 0, timeE = 0;
+	float timePassed = 0;
+	while (!glfwWindowShouldClose(me.getWindow())){
+		timePassed = timeE - timeS;
+		//std::cout << 1 / timePassed << std::endl;
+		timeS = glfwGetTime();
+		//fps->simulate(timePassed);
+		//std::cout << fps->getParticleCount() << std::endl;
+		/*if (time >= 8000){
+			time = 0;
+			angle = -angle;
+		}
+		tmpsc = (time / 8000) * M_PI * 2;*/
+		if (mouseDown == true){
+			mouseDown = false;
+			glfwGetCursorPos(me.getWindow(), &xpos, &ypos);
+			glfwGetWindowSize(me.getWindow(), &x, &y);
+			float xmouse = (xpos / x) * 2 - 1;
+			float ymouse = -((ypos / y) * 2 - 1);
+			glm::vec3 mfpl = mc->getMouseOnFarPlaneWorldSpace(xmouse, ymouse);
+			std::cout << mfpl.x << " " << mfpl.y << " " << mfpl.z << std::endl;
+			//glm::vec3 bonepos = bonePtr->getLocationForFrame(1);
+			//e->applyRotationToBoneAtFrame(bonePtr, 1, glm::inverse(rotationQuat));
+			//rotationQuat = engine::twoVectorsToQuat(glm::normalize(mfpl - bonepos), glm::vec3(0.0f, 0.0f, -1.0f) );
+			//e->applyRotationToBoneAtFrame(bonePtr, 1, rotationQuat);
+		}
+		
+		//mdlight->setLocation(glm::vec4(sin(tmpsc) * 7.0f, 0.0f, cos(tmpsc) * 7.0f, 1.0f));
+		//e->applyRotation(glm::angleAxis((float)M_PI / 800.0f, glm::vec3(0.0f, 1.0f, 0.0)));
+		//e->applyRotationToBoneAtFrame(bonePtr, 1, glm::angleAxis(angle, glm::vec3(0.0f, 1.0f, 0.0f)));
+
+		me.mainSingleLoop();
+		//Sleep(33);
+		timeE = glfwGetTime();
+		time += timePassed;
+		
+	}
+	//me.mainLoop();
 	//---------------------------------------------------------------------------
 
 return 0;

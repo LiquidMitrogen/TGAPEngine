@@ -88,10 +88,7 @@ namespace engine{
 	{
 		//dtor
 	}
-	void Renderer::addEntity(Entity *e)
-	{
-		entities.emplace_back(e);
-	}
+	
 	/*void Renderer::shadowMapPass()
 	{
 		double time = glfwGetTime();
@@ -231,9 +228,9 @@ namespace engine{
 		//glBindTexture(GL_TEXTURE_2D,this->shadowMapTex);
 		//glBindSampler(1,this->shadowMapSampler);
 
-		for (std::vector<std::unique_ptr<Entity>>::iterator it = entities.begin(); it != entities.end(); ++it)
+		//for (std::vector<std::unique_ptr<Entity>>::iterator it = entities.begin(); it != entities.end(); ++it)
 
-		{
+		//{
 
 			//(*it)->prepare();
 			//Material * mat = (*it)->entityMaterial;
@@ -255,13 +252,14 @@ namespace engine{
 
 			//mat->setUniformWorldToCamera(this->drawPassCamera->getWorldToCameraMatrix());
 			//mat->setUniformCameraToClip(this->drawPassCamera->getCameraToClipMatrix());
-			(*it)->draw(glm::mat4(1.0f),context);
+			//(*it)->draw(glm::mat4(1.0f),context);
+		this->activeScene->draw(context);
 			//glDrawElements(GL_TRIANGLES,(*it)->getVertexAttributes()->indiceCount,GL_UNSIGNED_INT,0);
 			//   (*it)->resetRotation();
 			//   (*it)->resetLocation();
 			//   (*it)->applyTranslation(glm::vec3(4.0f,12.0f,-7.0f));
 			//   (*it)->applyRotation(glm::quat(glm::vec3(time * 1.63,0.0,0.0)));
-		}
+		//}
 	}
 	/*
 	void Renderer::testRender(){
@@ -337,7 +335,7 @@ namespace engine{
 		return glm::mat4(1.0);
 	}
 
-	void Renderer::removeEntity(Entity *e){
+	/*void Renderer::removeEntity(Entity *e){
 		std::vector<std::unique_ptr<Entity>>::iterator it = entities.begin();
 		while (it != entities.end()){
 			if ((*it).get() == e){
@@ -349,6 +347,6 @@ namespace engine{
 			}
 
 		}
-	}
+	}*/
 
 }

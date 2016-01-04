@@ -136,6 +136,35 @@ def do_export(file,context, props, object, objectid):
 	obrot = ob.rotation_quaternion
 	file.write(struct.pack('ffff',obrot.w,obrot.x,obrot.z,-obrot.y))#rotation of object
 	file.write(struct.pack('fff',ob.scale.x,ob.scale.z,ob.scale.y))#scale of object
+	
+	vstr = ob.get('vertex_shader',-1)
+	vstrCount = 0
+	if (vstr == -1):
+		vstrCount = 0
+	else:
+		vstrCount = len(vstr)
+	if vstrCount == 0:
+		print('writing 0 to vlen')
+		file.write(struct.pack('I' ,0))#no vertex_shader or empty
+	else:
+		print('writing v ',vstrCount,' len str ',vstr)
+		file.write(struct.pack('I%ds' % (vstrCount) ,vstrCount,bytes(vstr,'ascii')))#vertex_shader string
+	print('vstr len ', vstrCount)
+	print('vstr ', vstr)
+	fstr = ob.get('fragment_shader',-1)
+	fstrCount = 0
+	if (fstr == -1):
+		fstrCount = 0
+	else:
+		fstrCount = len(fstr)
+	if fstrCount == 0:
+		print('writing 0 to vlen')
+		file.write(struct.pack('I' ,0))#no vertex_shader or empty
+	else:
+		print('writing f ',fstrCount,' len str ',fstr)
+		file.write(struct.pack('I%ds' % (fstrCount) ,fstrCount,bytes(fstr,'ascii')))#vertex_shader string
+	print('fstr len ', fstrCount)
+	print('fstr ', fstr)
 ##################################################### /Header
 	attrSize = [0] * 16
 	attrSize[:4] = (3 , 3 , 4 , 4) #3 vertices, 3 normals, 4 weights, 4 bone indices , ? 2 textures, ? 3 tangents, ? 3 bitangents

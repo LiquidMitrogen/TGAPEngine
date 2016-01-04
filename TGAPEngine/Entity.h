@@ -51,12 +51,14 @@ class Entity
         void resetScale();
 
 		void addChild(Entity * e);
+		void setParent(Entity * e){ this->parent = e; };
+		Entity * getParent(){ return this->parent; };
         glm::mat4 getTransformationMatrix();
         //void updateTransformationMatrix();
 		virtual void prepare();
 		virtual Entity * makeDuplicate();
     protected:
-
+		Entity * parent = NULL;
 		std::list<std::unique_ptr<Entity>> children;
 
         std::vector<std::unique_ptr<Image>> textures;

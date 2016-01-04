@@ -21,7 +21,10 @@ SingleMatrixMaterial::SingleMatrixMaterial(const char * vertex_file_path,const c
     //setUniformColor(glm::vec4(1.0f,0.0f,0.0f,1.0f));
     //setUniformLightDir(worldToCamera * light);
     //setup
-    setUniformAmbient(glm::vec4(1.0f,0.0f,0.0f,0.0f));
+	setUniformAmbient(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+	setUniformColor(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+	setUniformSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+	setUniformShininess(128.0f);
 	GLint * tempBoneUnif;
 	tempBoneUnif = new GLint[14];
 	if (DEBUG_MODE == 1){

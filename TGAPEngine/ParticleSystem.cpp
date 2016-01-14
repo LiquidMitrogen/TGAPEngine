@@ -62,16 +62,18 @@ namespace engine{
 	{
 		this->prepare();
 		Material * mat = this->entityMaterial;
-
-		if (context->activeLight->isDirectional()){
-			mat->setUniformLightDir(context->activeLight->getDirection());
-			mat->setUniformPointLight(false);
+		mat->setUniformLightsNumber(context->lightsNumber);
+		for (int i = 0; i < context->lightsNumber; i++){
+			mat->setUniformLightCol(context->activeLights[i]->getColor(), i);
+			if (context->activeLights[i]->isDirectional()){
+				mat->setUniformLightDir(context->activeLights[i]->getDirection(),i);
+				mat->setUniformPointLight(false,i);
+			}
+			else{
+				mat->setUniformPointLight(true,i);
+				mat->setUniformLightDir(context->activeLights[i]->getLocation(),i);
+			}
 		}
-		else{
-			mat->setUniformPointLight(true);
-			mat->setUniformLightDir(context->activeLight->getLocation());
-		}
-
 		//mat->setUniformLightDir2(this->drawPassCamera->getWorldToProjectionMatrix() *this->tmp2->getDirection());
 		//glUniform1i(((ActorTextureMatrixMaterial *)mat)->smUniform, 0);
 

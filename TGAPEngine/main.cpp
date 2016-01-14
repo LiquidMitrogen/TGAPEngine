@@ -40,11 +40,15 @@ int main(){
 	engine::MainEngine me(800,600);
 	//engine::Camera * mc = new engine::Camera(glm::perspective(1.182664626f, 9.0f / 6.0f, 1.0f, 750.0f), glm::vec3(1.0f, 0.0f, 15.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	engine::Camera * mc = engine::Camera::perspectiveCamera(1.182664626f, 9.0f / 6.0f, 1.0f, 750.0f, 0.5f, 2.0f, 15.0f, 0.5f, 2.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-	engine::Light * mdlight = new engine::Light(1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 10.0f,false);
+	engine::Light * mdlight = new engine::Light(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,false);
+	engine::Light * mdlight2 = new engine::Light(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, false);
+	engine::Light * mdlight3 = new engine::Light(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, false);
 	engine::Renderer *mr = new engine::Renderer(mc, mdlight);
+	mr->setLight(mdlight2, 1);
+	mr->setLight(mdlight3, 2);
 	me.setRenderer(mr);
 
-	engine::Scene * scene1 = bam.loadScene("wtf.bams", NULL);
+	engine::Scene * scene1 = bam.loadScene("fisf5.bams", NULL);
 	mr->setActiveScene(scene1);
 
 

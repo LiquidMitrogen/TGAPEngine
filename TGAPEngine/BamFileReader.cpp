@@ -472,4 +472,30 @@ struct Header BamFileReader::loadHeader(){
 
 	return header;
 }
+Entity * BamFileReader::loadEntity(const char filepath[]){
+	file.open(filepath, std::ios::in | std::ios::binary);
+	if (file.is_open()) std::cout << "otwarto plik " << filepath << std::endl;
+
+	Entity * newe;
+	struct Header header = this->loadHeader();
+	if (header.configurationFlags & 0x04){//object has no bones
+		newe = this->loadNoBoneFile();
+	}
+	else{
+		newe = this->loadFile();
+	}
+	newe->name = header.entityName;
+	newe->buildId = header.id;
+	newe->applyTranslation(header.location);
+	std::cout << header.location.x << " " << header.location.y << " " << header.location.z << std::endl;
+	newe->applyRotation(header.rotation);
+	std::cout << header.rotation.x << " " << header.rotation.y << " " << header.rotation.z << std::endl;
+	newe->applyScale(header.scale);
+	SingleMatrixMaterial * entitymaterial = new SingleMatrixMaterial(header.vertexShaderStr.c_str(), header.fragmentShaderStr.c_str());
+	newe->entityMaterial = entitymaterial;
+
+
+	file.close();
+	return newe;
+}
 }

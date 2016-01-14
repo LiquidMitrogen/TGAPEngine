@@ -11,11 +11,16 @@ namespace engine{
 		//this->calculateOrthoProjection();
 		//this->shadowPassCamera = new Camera(glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.0f, 100.0f), glm::vec3(-5.0f, 0.0f, 15.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		this->shadowPassCamera = NULL;
-		this->tmp1 = light;
-		this->context = new DrawingContext(drawingPassCamera, light);
+		this->lights[0] = light;
+		this->lights[1] = NULL;
+		this->lights[2] = NULL;
+		this->lights[3] = NULL;
+		this->context = new DrawingContext(drawingPassCamera, this->lights);
 		if (DEBUG_MODE == 1){
 			std::cout << "new renderer" << std::endl;
 		}
+		this->auxScene = NULL;
+		this->activeScene = NULL;
 		//this->tmp1 = new DirectionalLight(vec4(0.0, -1.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0), vec4(0.0, 10.0, 0.0, 1.0));
 		//this->tmp2 = new DirectionalLight(vec4(0.0, 1.0, -1.0, 0.0), vec3(1.0, 1.0, 1.0), vec4(0.0, 0.0, 10.0, 1.0));
 		//test
@@ -253,7 +258,11 @@ namespace engine{
 			//mat->setUniformWorldToCamera(this->drawPassCamera->getWorldToCameraMatrix());
 			//mat->setUniformCameraToClip(this->drawPassCamera->getCameraToClipMatrix());
 			//(*it)->draw(glm::mat4(1.0f),context);
-		this->activeScene->draw(context);
+		context->copyLights(this->lights);
+		if (activeScene != NULL)
+			this->activeScene->draw(context);
+		if (auxScene!=NULL)
+			this->auxScene->draw(context);
 			//glDrawElements(GL_TRIANGLES,(*it)->getVertexAttributes()->indiceCount,GL_UNSIGNED_INT,0);
 			//   (*it)->resetRotation();
 			//   (*it)->resetLocation();

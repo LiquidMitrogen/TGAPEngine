@@ -33,6 +33,7 @@ class BamFileReader
         AnimatedActor * loadFile();
 		Entity * loadNoBoneFile();
 		Scene * loadScene(const char filepath[], Renderer * renderer);
+		Entity * loadEntity(const char filepath[]);
     protected:
 		struct Header loadHeader();
 		std::ifstream file;

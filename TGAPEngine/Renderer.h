@@ -30,6 +30,7 @@ namespace engine{
 		//void addEntity(Entity *e);
 		//void removeEntity(Entity *e);
 		void setActiveScene(Scene * scene){ this->activeScene = scene; };
+		void setAuxScene(Scene * scene){ this->auxScene = scene; };
 		//void shadowMapPass();
 		void drawingPass();
 		//void testRender();
@@ -38,8 +39,17 @@ namespace engine{
 		Camera * getActiveCamera(){
 			return drawPassCamera;
 		};
-		Light * getLight(){
-			return tmp1;
+		void setLight(Light * light, int index){
+			if (index < 4 && index >= 0){
+				lights[index] = light;
+			}
+		}
+		Light * getLight(int index){
+			if (index < 4 && index >= 0){
+				return lights[index];
+			}
+			else return NULL;
+			
 		};
 	protected:
 	private:
@@ -48,10 +58,11 @@ namespace engine{
 
 
 		Scene * activeScene;
+		Scene * auxScene;
 
 		DrawingContext * context;
 
-		Light *tmp1, *tmp2;
+		Light *lights[4];
 
 		glm::vec3 perspectivePoints[10];
 

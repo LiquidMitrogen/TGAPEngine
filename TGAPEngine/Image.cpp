@@ -92,6 +92,13 @@ void Image::use()
     }
 }
 
+void Image::reject(){
+	glBindSampler(texUnit, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE0);
+	
+}
+
 GLubyte * Image::getImageData()
 {
  return this->imageData;

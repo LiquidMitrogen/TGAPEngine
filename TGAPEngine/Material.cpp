@@ -13,8 +13,20 @@ Material::Material(const char * vertex_file_path,const char * fragment_file_path
 	this->cameraToClipUnif = glGetUniformLocation(program, "cameraToClip");
 	this->modelToWorldUnif = glGetUniformLocation(program, "modelToWorld");
 	this->worldToCameraUnif = glGetUniformLocation(program, "worldToCamera");
-	this->lightDirUnif = glGetUniformLocation(program, "lightDir");
-	this->pointLightUnif = glGetUniformLocation(program, "pointLight");
+	for (int i = 0; i < 4; i++){
+		std::ostringstream dir;
+		dir << "lightDir[" << i << "]";
+		std::ostringstream col;
+		col << "lightCol[" << i << "]";
+		std::ostringstream poi;
+		poi << "pointLight[" << i << "]";
+		this->lightDirUnif[i] = glGetUniformLocation(program, dir.str().c_str());
+		this->lightColUnif[i] = glGetUniformLocation(program, col.str().c_str());
+		this->pointLightUnif[i] = glGetUniformLocation(program, poi.str().c_str());
+	}
+	
+	
+	this->lightsNumberUnif = glGetUniformLocation(program, "lightsNumber");
 }
 Material::~Material()
 {
@@ -116,19 +128,30 @@ void Material::setUniformWorldToCamera(glm::mat4 matrix)
 {
 	glUniformMatrix4fv(this->worldToCameraUnif, 1, GL_FALSE, &matrix[0][0]);
 }
-void Material::setUniformLightDir(glm::vec4 lightDir)
+void Material::setUniformLightDir(glm::vec4 lightDir,int index)
 {
-	glUniform4fv(this->lightDirUnif, 1, &lightDir[0]);
+	glUniform4fv(this->lightDirUnif[index], 1, &lightDir[0]);
 }
 
-void Material::setUniformPointLight(bool isPointLight){
+void Material::setUniformLightCol(glm::vec3 lightCol, int index)
+{
+	glUniform3fv(this->lightColUnif[index], 1, &lightCol[0]);
+}
+
+void Material::setUniformPointLight(bool isPointLight,int index){
 	if (isPointLight){
-		glUniform1ui(this->pointLightUnif, 1);
+		glUniform1ui(this->pointLightUnif[index], 1);
 	}
 	else
 	{
-		glUniform1ui(this->pointLightUnif, 0);
+		glUniform1ui(this->pointLightUnif[index], 0);
 	}
 	
+}
+void Material::setUniformLightsNumber(unsigned int number){
+	
+	glUniform1ui(this->lightsNumberUnif, number);
+	
+
 }
 }

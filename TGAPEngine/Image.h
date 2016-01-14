@@ -20,6 +20,7 @@ class Image
         Image(GLubyte * data, unsigned int width,unsigned int height,int unit,GLint format, unsigned int filterMode, bool repeat);
         virtual ~Image(){};
         void use();
+		void reject();
         GLubyte * getImageData();
         void setImageData(GLubyte *imageData);
 		void setSubImageData(GLubyte *imageData, unsigned int bx, unsigned int by, unsigned int ex, unsigned int ey);

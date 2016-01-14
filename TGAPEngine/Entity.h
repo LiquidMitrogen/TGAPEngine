@@ -56,6 +56,7 @@ class Entity
         glm::mat4 getTransformationMatrix();
         //void updateTransformationMatrix();
 		virtual void prepare();
+		virtual void cleanUp();
 		virtual Entity * makeDuplicate();
     protected:
 		Entity * parent = NULL;

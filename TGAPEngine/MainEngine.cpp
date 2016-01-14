@@ -315,10 +315,10 @@ void MainEngine::mainSingleLoop(){
 		exit(1);
 	}
 	
-		if (DEBUG_MODE == 1)
+		/*if (DEBUG_MODE == 1)
 			std::cout << "clearing" << std::endl;
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+*/
 		if (DEBUG_MODE == 1)
 			std::cout << "drawing - calling Renderer" << std::endl;
 		m_renderer->drawingPass();//drawing

@@ -31,7 +31,7 @@ namespace engine{
 		for (std::vector<Entity *>::iterator it = entities.begin(); it != entities.end(); ++it)
 
 		{
-			(*it)->draw(glm::mat4(1.0f),context);
+		(*it)->draw(glm::mat4(1.0f),context);
 		}
 	}
 	Entity * Scene::findEntityByName(std::string name){
@@ -42,6 +42,5 @@ namespace engine{
 				return (*it);
 			}
 		}
-		return nullptr;
 	}
 }

@@ -57,16 +57,7 @@ namespace engine{
 	ParticleSystem::~ParticleSystem()
 	{
 	}
-	std::vector<struct Particle> * ParticleSystem::getParticlesPtr(){
-		if (this->externalSimulation){
-			this->needsBufferUpdate = true;
-			return &this->particles;
-		}
-		else{
-			return nullptr;
-		}
-		
-	}
+
 	void ParticleSystem::draw(glm::mat4 parentMatrix, DrawingContext * context)
 	{
 		this->prepare();
@@ -106,7 +97,7 @@ namespace engine{
 		if (this->disableDepthTests){
 			glEnable(GL_DEPTH_TEST);
 		}
-		for (std::list<std::shared_ptr<Entity>>::iterator it = children.begin(); it != children.end(); ++it){
+		for (std::list<std::unique_ptr<Entity>>::iterator it = children.begin(); it != children.end(); ++it){
 			(*it)->draw(combinedMatrix, context);
 		}
 		//std::cout<<"done"<<std::endl;

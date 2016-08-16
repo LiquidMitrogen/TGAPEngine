@@ -2,7 +2,7 @@
 #define MAINENGINE_H
 #include<iostream>
 #include<iomanip>
-//#define GLEW_STATIC
+#define GLEW_STATIC
 #include <GL/glew.h>
 #define GLFW_DLL
 #include <GLFW/glfw3.h>

@@ -1,9 +1,11 @@
 #ifndef VERTEXATTRIBUTES_H
 #define VERTEXATTRIBUTES_H
-//#define GLEW_STATIC
+#define GLEW_STATIC
 #include <GL/glew.h>
 #include<vector>
 #include<iostream>
+#define GLEW_STATIC
+#include <GL/glew.h>
 namespace engine{
     typedef struct VaoInitData
     {

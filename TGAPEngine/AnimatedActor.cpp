@@ -17,16 +17,26 @@ void AnimatedActor::draw()
     glDrawElements(GL_TRIANGLES,vertexAttributeBuf->indiceCount,GL_UNSIGNED_INT,0);
 }
 */
-void AnimatedActor::prepareArmature()
+void AnimatedActor::calcBoneUniforms()
 {
-
+    glm::mat4 * unitMatrix;
+    unitMatrix = new glm::mat4(1.0f);
+	if (DEBUG_MODE == 1){
+		std::cout << "new AnimatedActor" << std::endl;
+	}
     this->entityMaterial->use();
-    this->armature->modifyArmatureUniforms(((SingleMatrixMaterial*)this->entityMaterial)->getBoneUniforms());
-    
+    rootBone->modifyBoneUnif(((SingleMatrixMaterial*)this->entityMaterial)->getBoneUniforms(),unitMatrix,glm::quat(1.0f,0.0f,0.0f,0.0f),this->animationFrameIndex);
+    delete unitMatrix;
 }
-
+void AnimatedActor::applyRotationToBoneAtFrame(Bone * bone, int frame, glm::quat quaternion){
+	this->needBoneUnifUpdate = true;
+	bone->applyArmatureRotation(frame, quaternion);
+}
 void AnimatedActor::prepare(){
 	Entity::prepare();
-	prepareArmature();
+	if (needBoneUnifUpdate == true){
+		calcBoneUniforms();
+		needBoneUnifUpdate = false;
+	}
 }
 }

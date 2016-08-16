@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-//#define GLEW_STATIC
+#define GLEW_STATIC
 #include <GL/glew.h>
 #include <cstdlib>
 #include <ctime>
@@ -83,15 +83,9 @@ namespace engine{
 		virtual void setTimeBetweenParticles(float sec){ this->secBetweenParticles = sec; };
 		
 		unsigned int getParticleCount(){ return this->particleCount; };
-		std::vector<struct Particle> * getParticlesPtr();
-		void setExternalSimulation(bool setValue){
-			this->externalSimulation = setValue;
-		}
 		
 
 	protected:
-		//if set getParticlePtr can be used to manipulate particle data - you can then draw;
-		bool externalSimulation = false;
 		float partialTime = 0;
 		//unsigned int findFree();
 		unsigned int lastIndex = 0;

@@ -6,7 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
-//#define GLEW_STATIC
+#define GLEW_STATIC
 #include <GL/glew.h>
 #include "Config.h"
 class ActorTextureMatrixMaterial : public engine::Material

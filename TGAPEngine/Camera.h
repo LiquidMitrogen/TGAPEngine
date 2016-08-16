@@ -10,7 +10,7 @@ namespace engine{
 	{
 	public:
 		Camera(mat4 toProjectionMatrix, vec3 location, vec3 lookAtTarget, vec3 upDirection);
-		static Camera * perspectiveCamera(float fov, float screenRatio, float nearZ, float farZ, float x, float y, float z, float targetx, float targety, float targetz, float upx, float upy, float upz);
+		static Camera * perspectiveCamera(float fov, float screenRatio, float near, float far, float x, float y, float z, float targetx, float targety, float targetz, float upx, float upy, float upz);
 		virtual ~Camera();
 
 		void setLocation(vec3 location);
@@ -31,7 +31,6 @@ namespace engine{
 			this->farPlane = farP;
 			this->nearPlane = nearP;
 		};
-		void setWorldToClipMatrix(glm::mat4 cameraToClip, glm::mat4 worldToCamera);
 	protected:
 	private:
 		float farPlane, nearPlane;

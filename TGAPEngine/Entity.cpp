@@ -24,14 +24,7 @@ void Entity::applyRotation(glm::quat rotationQuaternion)//globalnie - world-spac
     this->rotation = rotationQuaternion * this->rotation;
 	needsUpdate = true;
 }
-void Entity::applyRotation(glm::mat3 rotationMatrix){
-	this->rotation = glm::quat_cast(rotationMatrix) * this->rotation;
-	needsUpdate = true;
-}
-void Entity::setTransformationMatrix(glm::mat4 matrix){
-	this->modelToWorldMatrix = matrix;
-	needsUpdate = false;
-}
+
 void Entity::applyLocalRotationQ(glm::quat rotationQuaternion)//lokalnie - model space
 {
 	this->rotation = this->rotation * rotationQuaternion;
@@ -189,49 +182,43 @@ Entity::~Entity()
 
 void Entity::draw(glm::mat4 parentMatrix, DrawingContext * context)
 {
-
-	glm::mat4 combinedMatrix = parentMatrix * getTransformationMatrix();
-
-	if (this->disableDrawing == false){
-		this->prepare();
-		Material * mat = this->entityMaterial;
-		mat->setUniformLightsNumber(context->lightsNumber);
-		for (int i = 0; i < context->lightsNumber; i++){
-			mat->setUniformLightCol(context->activeLights[i]->getColor(), i);
-			if (context->activeLights[i]->isDirectional()){
-
-				mat->setUniformLightDir(context->activeLights[i]->getDirection(), i);
-				mat->setUniformPointLight(false, i);
-			}
-			else{
-				mat->setUniformPointLight(true, i);
-				mat->setUniformLightDir(context->activeLights[i]->getLocation(), i);
-			}
+	this->prepare();
+	Material * mat = this->entityMaterial;
+	mat->setUniformLightsNumber(context->lightsNumber);
+	for (int i = 0; i < context->lightsNumber; i++){
+		mat->setUniformLightCol(context->activeLights[i]->getColor(), i);
+		if (context->activeLights[i]->isDirectional()){
+			
+			mat->setUniformLightDir(context->activeLights[i]->getDirection(),i);
+			mat->setUniformPointLight(false,i);
 		}
-
-
-		//mat->setUniformLightDir2(this->drawPassCamera->getWorldToProjectionMatrix() *this->tmp2->getDirection());
-		//glUniform1i(((ActorTextureMatrixMaterial *)mat)->smUniform, 0);
-
-		mat->setUniformWorldToCamera(context->activeCamera->getWorldToCameraMatrix());
-		mat->setUniformCameraToClip(context->activeCamera->getCameraToClipMatrix());
-
-		if (DEBUG_MODE == 1)
-			std::cout << "Drawing glDrawElements" << std::endl;
-		
-		this->entityMaterial->setUniformModelToWorld(combinedMatrix);
-		if (this->disableDepthTests){
-			glDisable(GL_DEPTH_TEST);
-		}
-		glDrawElements(GL_TRIANGLES, vertexAttributeBuf->indiceCount, GL_UNSIGNED_INT, 0);
-
-		cleanUp();
-		if (this->disableDepthTests){
-			glEnable(GL_DEPTH_TEST);
+		else{
+			mat->setUniformPointLight(true,i);
+			mat->setUniformLightDir(context->activeLights[i]->getLocation(),i);
 		}
 	}
 	
-	for (std::list<std::shared_ptr<Entity>>::iterator it = children.begin(); it != children.end(); ++it){
+
+	//mat->setUniformLightDir2(this->drawPassCamera->getWorldToProjectionMatrix() *this->tmp2->getDirection());
+	//glUniform1i(((ActorTextureMatrixMaterial *)mat)->smUniform, 0);
+
+	mat->setUniformWorldToCamera(context->activeCamera->getWorldToCameraMatrix());
+	mat->setUniformCameraToClip(context->activeCamera->getCameraToClipMatrix());
+	
+    if(DEBUG_MODE == 1)
+    std::cout<<"Drawing glDrawElements"<<std::endl;
+	glm::mat4 combinedMatrix = parentMatrix * getTransformationMatrix();
+	this->entityMaterial->setUniformModelToWorld(combinedMatrix);
+	if (this->disableDepthTests){
+		glDisable(GL_DEPTH_TEST);
+	}
+    glDrawElements(GL_TRIANGLES,vertexAttributeBuf->indiceCount,GL_UNSIGNED_INT,0);
+
+	cleanUp();
+	if (this->disableDepthTests){
+		glEnable(GL_DEPTH_TEST);
+	}
+	for (std::list<std::unique_ptr<Entity>>::iterator it = children.begin(); it != children.end(); ++it){
 		(*it)->draw(combinedMatrix, context);
 	}
     //std::cout<<"done"<<std::endl;
@@ -258,15 +245,5 @@ void Entity::cleanUp(){
 }
 void Entity::addChild(Entity * e){
 	this->children.emplace_back(e);
-}
-std::shared_ptr<Entity> Entity::findChildByName(std::string name){
-	for (std::list<std::shared_ptr<Entity>>::iterator it = children.begin(); it != children.end(); ++it)
-
-	{
-		if ((*it)->name == name){
-			return (*it);
-		}
-	}
-	return nullptr;
 }
 }

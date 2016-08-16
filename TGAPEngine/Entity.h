@@ -5,7 +5,7 @@
 #include "Bone.h"
 #include "Material.h"
 #include "VertexAttributes.h"
-//#define GLEW_STATIC
+#define GLEW_STATIC
 #include <GL/glew.h>
 #include <vector>
 #define GLM_FORCE_RADIANS
@@ -25,7 +25,6 @@ class Entity
 		std::string name;
 		bool makesShadow = true;
 		bool disableDepthTests = false;
-		bool disableDrawing = false;
 
 		Entity(VertexAttributes * va);
 		Entity(Entity& other);
@@ -38,7 +37,6 @@ class Entity
         Material * entityMaterial;
 
         void applyRotation(glm::quat rotationQuaternion);
-		void applyRotation(glm::mat3 rotationMatrix);
 		void applyLocalRotation(glm::quat rotationQuaternion);
 		void applyLocalRotationQ(glm::quat rotationQuaternion);
 
@@ -51,21 +49,18 @@ class Entity
         void resetRotation();
         void resetLocation();
         void resetScale();
-		 
-		void setTransformationMatrix(glm::mat4 matrix);
 
 		void addChild(Entity * e);
 		void setParent(Entity * e){ this->parent = e; };
 		Entity * getParent(){ return this->parent; };
         glm::mat4 getTransformationMatrix();
-		std::shared_ptr<Entity> findChildByName(std::string name);
         //void updateTransformationMatrix();
 		virtual void prepare();
 		virtual void cleanUp();
 		virtual Entity * makeDuplicate();
     protected:
 		Entity * parent = NULL;
-		std::list<std::shared_ptr<Entity>> children;
+		std::list<std::unique_ptr<Entity>> children;
 
         std::vector<std::unique_ptr<Image>> textures;
 

@@ -10,16 +10,14 @@
 #include "VertexAttributes.h"
 #include "Entity.h"
 #include "Bone.h"
-#include "Action.h"
+#include "BoneFrameMatrix.h"
 #include "AnimatedActor.h"
 #include "Config.h"
 #include "Renderer.h"
-#include "Armature.h"
 namespace engine{
 
-	enum EntityType  { MeshT, ArmatureT };
+
 	struct Header{
-		EntityType type;
 		unsigned int id;
 		unsigned char configurationFlags;
 		glm::quat rotation;
@@ -32,15 +30,11 @@ class BamFileReader
     public:
         BamFileReader();
         virtual ~BamFileReader();
-		AnimatedActor * loadMeshFile();
+        AnimatedActor * loadFile();
 		Entity * loadNoBoneFile();
-		Scene * loadScene(const char filepath[]);
+		Scene * loadScene(const char filepath[], Renderer * renderer);
 		Entity * loadEntity(const char filepath[]);
     protected:
-		Keyframe loadKeyframe();
-		Action loadAction(unsigned int boneNum);
-		Bone * loadBones(unsigned int boneCount);
-		Armature * loadArmature();
 		struct Header loadHeader();
 		std::ifstream file;
     private:

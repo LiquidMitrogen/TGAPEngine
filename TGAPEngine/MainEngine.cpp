@@ -133,7 +133,7 @@ int MainEngine::initialise(unsigned int width, unsigned int height)
         return 1;
     }
 	glfwMakeContextCurrent(m_window);
-	//glfwSwapInterval(0);
+	glfwSwapInterval(1);
     GLenum err = glewInit();
     if (GLEW_OK != err)
     {

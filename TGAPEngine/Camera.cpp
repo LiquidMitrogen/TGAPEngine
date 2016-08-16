@@ -8,10 +8,10 @@ namespace engine{
 	{
 
 	}
-	Camera * Camera::perspectiveCamera(float fovangle, float screenRatio, float near, float far, float x, float y, float z, float targetx, float targety, float targetz, float upx, float upy, float upz)
+	Camera * Camera::perspectiveCamera(float fovangle, float screenRatio, float nearZ, float farZ, float x, float y, float z, float targetx, float targety, float targetz, float upx, float upy, float upz)
 	{
-		Camera * cam = new Camera(glm::perspective(fovangle, screenRatio, near, far), glm::vec3(x, y, z), glm::vec3(targetx, targety, targetz), glm::vec3(upx, upy, upz));
-		cam->setNearFar(near, far);
+		Camera * cam = new Camera(glm::perspective(fovangle, screenRatio, nearZ, farZ), glm::vec3(x, y, z), glm::vec3(targetx, targety, targetz), glm::vec3(upx, upy, upz));
+		cam->setNearFar(nearZ, farZ);
 		return cam;
 		if (DEBUG_MODE == 1){
 			std::cout << "new Camera" << std::endl;
@@ -96,5 +96,12 @@ namespace engine{
 		glm::vec4 mouseOnFarPlaneClipSpace = glm::vec4(mouseXClipSpace * farPlane, mouseYClipSpace * farPlane, 1 * farPlane, farPlane);
 		glm::vec4 mouseOnFarPlaneWorld = inverse(this->getCameraToClipMatrix() * this->getWorldToCameraMatrix()) * mouseOnFarPlaneClipSpace;
 		return glm::vec3(mouseOnFarPlaneWorld);
+	}
+
+	void Camera::setWorldToClipMatrix(glm::mat4 cameraToClip, glm::mat4 worldToCamera){
+		this->cameraToClip = cameraToClip;
+		this->worldToCamera = worldToCamera;
+		this->worldToClip = this->cameraToClip * this->worldToCamera;
+		this->needsUpdate = false;
 	}
 }

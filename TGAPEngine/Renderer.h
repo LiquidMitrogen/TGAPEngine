@@ -36,6 +36,9 @@ namespace engine{
 		//void testRender();
 		//void testParticles(ActorTextureMatrixMaterial * mat, ParticleSystem * particleSystem);
 		static glm::mat4 worldToCameraMatrix;
+		void setDisableClear(bool disableClear){
+			this->disableClear = disableClear;
+		}
 		Camera * getActiveCamera(){
 			return drawPassCamera;
 		};
@@ -55,7 +58,7 @@ namespace engine{
 	private:
 		void makeSMFBO();
 		const bool disableSmadowMapping = true;
-
+		bool disableClear = false;
 
 		Scene * activeScene;
 		Scene * auxScene;

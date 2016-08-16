@@ -1,11 +1,12 @@
 #ifndef ANIMATEDACTOR_H
 #define ANIMATEDACTOR_H
-#include "Bone.h"
+
+#include "Armature.h"
 #include "Material.h"
 #include "VertexAttributes.h"
 #include "SingleMatrixMaterial.h"
 #include "ActorTextureMatrixMaterial.h"
-#define GLEW_STATIC
+//#define GLEW_STATIC
 #include <GL/glew.h>
 #include <vector>
 #include "Image.h"
@@ -17,24 +18,25 @@ namespace engine{
 class AnimatedActor: public Entity
 {
     public:
-        AnimatedActor(VertexAttributes * va,Bone * root,int maxAnimationFrame)
-			:Entity(va), rootBone(root), maxAnimationFrame(maxAnimationFrame){};
+        AnimatedActor(VertexAttributes * va,std::string armatureName)
+			:Entity(va), armatureName(armatureName){};
         virtual ~AnimatedActor();
         VertexAttributes * getVertexAttributes(){return vertexAttributeBuf;};
-        void calcBoneUniforms();
-		Bone * getArmatureRoot(){
-			return this->rootBone;
-		}
-        //SingleMatrixMaterial * entityMaterial;
-		void setAmimationFrame(unsigned int frame){ this->animationFrameIndex = frame; this->needBoneUnifUpdate = true; };
-        int getmaxAnimationFrame(){return this->maxAnimationFrame;};
-		void applyRotationToBoneAtFrame(Bone * bone, int frame, glm::quat quaternion);
+        void prepareArmature();
+		Armature * getArmature(){
+			return this->armature;
+		};
+		void assignArmature(Armature * armature){
+			this->armature = armature;
+		};
+		//void setAnimationFrame(unsigned int frame){ this->animationFrameIndex = frame; this->needBoneUnifUpdate = true; };
+		
 		virtual void prepare();
+
+		std::string armatureName;
 	protected:
-        int animationFrameIndex = 1;
-        int maxAnimationFrame;
-        Bone * rootBone;
-		bool needBoneUnifUpdate = true;
+		
+		Armature * armature;
 
 
 

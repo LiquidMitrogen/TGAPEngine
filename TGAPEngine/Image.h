@@ -1,7 +1,7 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 #include <iostream>
-#define GLEW_STATIC
+//#define GLEW_STATIC
 #include <GL/glew.h>
 #include <cstring>
 #include "Config.h"

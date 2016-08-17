@@ -35,7 +35,7 @@
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PlatformToolset>v120</PlatformToolset>
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PlatformToolset>v120</PlatformToolset>
@@ -64,6 +64,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <SourcePath>D:\pro\TGAPEngine\include\TGAPEngine\include;D:\pro\TGAPEngine\include\TGAPEngine\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -110,78 +113,141 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Action.cpp" />
-    <ClCompile Include="ActorTextureMatrixMaterial.cpp" />
-    <ClCompile Include="AnimatedActor.cpp" />
-    <ClCompile Include="Armature.cpp" />
-    <ClCompile Include="BamFileReader.cpp" />
-    <ClCompile Include="Bone.cpp" />
-    <ClCompile Include="BoneFrameMatrix.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="DrawingContext.cpp" />
-    <ClCompile Include="FontRasterizer.cpp" />
-    <ClCompile Include="GuiUtility.cpp" />
-    <ClCompile Include="Keyframe.cpp" />
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="Image.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainEngine.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="ParticleSystem.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SingleMatrixMaterial.cpp" />
-    <ClCompile Include="SingleTextureMatrixMaterial.cpp" />
-    <ClCompile Include="Targa.cpp" />
-    <ClCompile Include="TextboxEntity.cpp" />
-    <ClCompile Include="TimerController.cpp" />
-    <ClCompile Include="TimerEvent.cpp" />
-    <ClCompile Include="Utility.cpp" />
-    <ClCompile Include="VertexAttributes.cpp" />
-    <ClCompile Include="Window.cpp" />
+    <None Include="res\test\a.bams" />
+    <None Include="res\test\actionstest.bams" />
+    <None Include="res\test\bnbn.bam" />
+    <None Include="res\test\bts.bam" />
+    <None Include="res\test\btss.bam" />
+    <None Include="res\test\cubetss.bam" />
+    <None Include="res\test\fisf5.bams" />
+    <None Include="res\test\p2reduweight.bam" />
+    <None Include="res\test\p2reduweightt.bam" />
+    <None Include="res\test\pony.bam" />
+    <None Include="res\test\pony2.bam" />
+    <None Include="res\test\pt.bam" />
+    <None Include="res\test\splitcube.bam" />
+    <None Include="res\test\strzalkav2.bam" />
+    <None Include="res\test\szklankav2.bam" />
+    <None Include="res\test\test.bam" />
+    <None Include="res\test\texturedPlane.bam" />
+    <None Include="res\test\texturedPlane2.bam" />
+    <None Include="res\test\texturedPlane3.bam" />
+    <None Include="res\test\texturedPlane3n.bam" />
+    <None Include="res\test\vulc.bam" />
+    <None Include="res\test\vulc2.bam" />
+    <None Include="res\test\wA.bam" />
+    <None Include="res\test\wAt.bam" />
+    <None Include="res\test\wAtf.bam" />
+    <None Include="res\test\wAtf2.bam" />
+    <None Include="res\test\wodav2.bam" />
+    <None Include="res\test\wtf.bams" />
+    <None Include="Shaders\equalizer.frag" />
+    <None Include="Shaders\equalizer.vert" />
+    <None Include="Shaders\fragment.frag" />
+    <None Include="Shaders\GUI.frag" />
+    <None Include="Shaders\GUI.vert" />
+    <None Include="Shaders\plasma.frag" />
+    <None Include="Shaders\plasma.vert" />
+    <None Include="Shaders\Text.frag" />
+    <None Include="Shaders\Text.vert" />
+    <None Include="Shaders\texture.frag" />
+    <None Include="Shaders\texture.vert" />
+    <None Include="Shaders\vertex.vert" />
+    <None Include="src\Blender Scripts\io_export_bam.py" />
+    <None Include="src\Blender Scripts\io_export_scene_bam.py" />
+    <None Include="src\Blender Scripts\reg.py" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Action.h" />
-    <ClInclude Include="ActorTextureMatrixMaterial.h" />
-    <ClInclude Include="AnimatedActor.h" />
-    <ClInclude Include="Armature.h" />
-    <ClInclude Include="BamFileReader.h" />
-    <ClInclude Include="Bone.h" />
-    <ClInclude Include="BoneFrameMatrix.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Config.h" />
-    <ClInclude Include="DrawingContext.h" />
-    <ClInclude Include="FontRasterizer.h" />
-    <ClInclude Include="GuiUtility.h" />
-    <ClInclude Include="Keyframe.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="Image.h" />
-    <ClInclude Include="MainEngine.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshGeneric.h" />
-    <ClInclude Include="ParticleSystem.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SingleMatrixMaterial.h" />
-    <ClInclude Include="SingleTextureMatrixMaterial.h" />
-    <ClInclude Include="Targa.h" />
-    <ClInclude Include="TextboxEntity.h" />
-    <ClInclude Include="TimerController.h" />
-    <ClInclude Include="TimerEvent.h" />
-    <ClInclude Include="Utility.h" />
-    <ClInclude Include="VertexAttributes.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="include\Action.h" />
+    <ClInclude Include="include\ActorTextureMatrixMaterial.h" />
+    <ClInclude Include="include\AnimatedActor.h" />
+    <ClInclude Include="include\Armature.h" />
+    <ClInclude Include="include\BamFileReader.h" />
+    <ClInclude Include="include\Bone.h" />
+    <ClInclude Include="include\BoneFrameMatrix.h" />
+    <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\Config.h" />
+    <ClInclude Include="include\DrawingContext.h" />
+    <ClInclude Include="include\Entity.h" />
+    <ClInclude Include="include\FontRasterizer.h" />
+    <ClInclude Include="include\GuiUtility.h" />
+    <ClInclude Include="include\Image.h" />
+    <ClInclude Include="include\Keyframe.h" />
+    <ClInclude Include="include\Light.h" />
+    <ClInclude Include="include\Main.h" />
+    <ClInclude Include="include\MainEngine.h" />
+    <ClInclude Include="include\MainLoop.h" />
+    <ClInclude Include="include\Material.h" />
+    <ClInclude Include="include\Mesh.h" />
+    <ClInclude Include="include\MeshGeneric.h" />
+    <ClInclude Include="include\ParticleSystem.h" />
+    <ClInclude Include="include\Renderer.h" />
+    <ClInclude Include="include\Scene.h" />
+    <ClInclude Include="include\SingleMatrixMaterial.h" />
+    <ClInclude Include="include\SingleTextureMatrixMaterial.h" />
+    <ClInclude Include="include\Targa.h" />
+    <ClInclude Include="include\TextboxEntity.h" />
+    <ClInclude Include="include\TimerController.h" />
+    <ClInclude Include="include\TimerEvent.h" />
+    <ClInclude Include="include\Utility.h" />
+    <ClInclude Include="include\VertexAttributes.h" />
+    <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragment.frag" />
-    <None Include="io_export_bam.py" />
-    <None Include="io_export_scene_bam.py" />
-    <None Include="reg.py" />
-    <None Include="vertex.vert" />
+    <ClCompile Include="src\Action.cpp" />
+    <ClCompile Include="src\ActorTextureMatrixMaterial.cpp" />
+    <ClCompile Include="src\AnimatedActor.cpp" />
+    <ClCompile Include="src\Armature.cpp" />
+    <ClCompile Include="src\BamFileReader.cpp" />
+    <ClCompile Include="src\Bone.cpp" />
+    <ClCompile Include="src\BoneFrameMatrix.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\DrawingContext.cpp" />
+    <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\FontRasterizer.cpp" />
+    <ClCompile Include="src\GuiUtility.cpp" />
+    <ClCompile Include="src\Image.cpp" />
+    <ClCompile Include="src\Keyframe.cpp" />
+    <ClCompile Include="src\Light.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MainEngine.cpp" />
+    <ClCompile Include="src\MainLoop.cpp" />
+    <ClCompile Include="src\Material.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\MeshGeneric.cpp" />
+    <ClCompile Include="src\ParticleSystem.cpp" />
+    <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\SingleMatrixMaterial.cpp" />
+    <ClCompile Include="src\SingleTextureMatrixMaterial.cpp" />
+    <ClCompile Include="src\Targa.cpp" />
+    <ClCompile Include="src\TextboxEntity.cpp" />
+    <ClCompile Include="src\TimerController.cpp" />
+    <ClCompile Include="src\TimerEvent.cpp" />
+    <ClCompile Include="src\Utility.cpp" />
+    <ClCompile Include="src\VertexAttributes.cpp" />
+    <ClCompile Include="src\Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\test\1.tga" />
+    <Image Include="res\test\a.tga" />
+    <Image Include="res\test\nor.tga" />
+    <Image Include="res\test\nor2.tga" />
+    <Image Include="res\test\nor3.tga" />
+    <Image Include="res\test\nor4.tga" />
+    <Image Include="res\test\nor5.tga" />
+    <Image Include="res\test\spacestock.tga" />
+    <Image Include="res\test\st.tga" />
+    <Image Include="res\test\star.tga" />
+    <Image Include="res\test\stormcrowdone211.tga" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="res\test\Hack-Bold.ttf" />
+    <Font Include="res\test\Hack-BoldOblique.ttf" />
+    <Font Include="res\test\Hack-Regular.ttf" />
+    <Font Include="res\test\Hack-RegularOblique.ttf" />
+    <Font Include="res\test\tahoma.ttf" />
+    <Font Include="res\test\tahomabd.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

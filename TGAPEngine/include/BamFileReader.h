@@ -31,7 +31,17 @@ namespace engine{
 		glm::vec3 location, scale;
 		std::string entityName,vertexShaderStr,fragmentShaderStr;
 	};
-
+	class ActorAWithHeader : AnimatedActor {
+	public:
+		Header header;
+	};
+	class ArmatureWithHeader : Armature {
+	public: Header header;
+	};
+	class EntityWithHeader : Entity {
+	public:
+		Header header;
+	};
 class BamFileReader
 {
     public:
@@ -39,7 +49,7 @@ class BamFileReader
         virtual ~BamFileReader();
 		AnimatedActor * loadMeshFile();
 		Entity * loadNoBoneFile();
-		Scene * loadScene(const char filepath[]);
+		Scene * loadScene(const char filepath[], bool containHeader);
 		Entity * loadEntity(const char filepath[]);
     protected:
 		Keyframe loadKeyframe();

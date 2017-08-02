@@ -319,11 +319,6 @@ namespace engine{
 
 
 	Scene * BamFileReader::loadScene(const char filepath[]){
-		typedef struct ObjectTreeElement{
-			unsigned char id;
-			unsigned char * childrenIds;
-			unsigned char childrenCount;
-		};
 		file.open(filepath, std::ios::in | std::ios::binary);
 		if (file.is_open()) std::cout << "otwarto plik " << filepath << std::endl;
 		unsigned short tag;

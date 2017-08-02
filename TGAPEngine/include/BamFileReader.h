@@ -18,6 +18,11 @@
 namespace engine{
 
 	enum EntityType  { MeshT, ArmatureT };
+	struct ObjectTreeElement {
+		unsigned char id;
+		unsigned char * childrenIds;
+		unsigned char childrenCount;
+	};
 	struct Header{
 		EntityType type;
 		unsigned int id;

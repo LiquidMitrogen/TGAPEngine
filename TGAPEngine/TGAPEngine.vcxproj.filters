@@ -69,9 +69,6 @@
     <None Include="res\test\a.bams">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="res\test\actionstest.bams">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="res\test\bnbn.bam">
       <Filter>Resource Files</Filter>
     </None>
@@ -410,5 +407,10 @@
     <Font Include="res\test\tahomabd.ttf">
       <Filter>Resource Files</Filter>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="res\aquarium3.bams">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

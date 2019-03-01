@@ -52,14 +52,14 @@ int main(){
 	//engine::Scene * scene1 = bam.loadScene("fisf5.bams", NULL);
 	engine::Scene * scene = new engine::Scene;
 	
-	engine::Scene * sceneActionTest = bam.loadScene("actionstest.bams");
+	engine::Scene * sceneActionTest = bam.loadScene("C:\\Users\\Szymon\\Documents\\TGAPEngine\\Debug\\aquarium3.bams", false);
 	mr->setActiveScene(sceneActionTest);
 
 	engine::AnimatedActor * cube = (engine::AnimatedActor *)sceneActionTest->findEntityByName("Cube");
-	engine::Armature * armature = cube->getArmature();
-	engine::Action * action = armature->getActionByName("Bow");
-	armature->applyAction(action, 1);
-	SingleMatrixMaterial * mat = new SingleMatrixMaterial("D:\\pro\\shadery\\bone\\vertex.vert", "fragment.frag");
+	//engine::Armature * armature = cube->getArmature();
+	/*engine::Action * action = armature->getActionByName("Bow");
+	armature->applyAction(action, 1);*/
+	SingleMatrixMaterial * mat = new SingleMatrixMaterial("C:\\Users\\Szymon\\Documents\\TGAPEngine\\TGAPEngine\\Shaders\\vertex.vert", "C:\\Users\\Szymon\\Documents\\TGAPEngine\\TGAPEngine\\Shaders\\fragment.frag");
 	cube->entityMaterial = mat;
 	mat->setUniformSampler(1);
 	mat->setUniformAmbient(glm::vec4(0.3f, 0.3f, 0.3f, 1.0f));
@@ -202,7 +202,7 @@ int main(){
 	double timeS = 0, timeE = 0;
 	float timePassed = 0;
 	float lastTime = 0;
-	unsigned int frame = action->rangeStart;
+	//unsigned int frame = action->rangeStart;
 	while (!glfwWindowShouldClose(me.getWindow())){
 		timePassed = timeE - timeS;
 		//std::cout << 1 / timePassed << std::endl;
@@ -232,12 +232,12 @@ int main(){
 		e->applyRotation(glm::angleAxis((float)M_PI / 800.0f, glm::vec3(0.0f, 1.0f, 0.0)));
 		e->applyRotationToBoneAtFrame(bonePtr, 1, glm::angleAxis(angle, glm::vec3(0.0f, 1.0f, 0.0f)));*/
 		//e->applyRotationToBoneAtFrame(bonePtr, 1, glm::angleAxis(angle, glm::vec3(0.0f, 1.0f, 0.0f)));
-		if ((glfwGetTime() - lastTime) > 0.0417){
+		/*if ((glfwGetTime() - lastTime) > 0.0417){
 			lastTime = glfwGetTime();
 			frame++;
 			if (frame >= action->rangeEnd) frame = action->rangeStart;
 			armature->applyAction(action, frame);
-		}
+		}*/
 
 		me.mainSingleLoop();
 		//Sleep(33);

@@ -7,6 +7,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TGAPEngine", "TGAPEngine\TG
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BamsViewer", "BamsViewer\BamsViewer.vcxproj", "{979386C5-05B0-4477-9980-0656E42F3512}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TGAPEngine.Tests", "TGAPEngine.Tests\TGAPEngine.Tests.vcxproj", "{D3E73157-56A1-47F3-B953-332BE7065B81}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A4CDA2DC-9463-4C4E-9215-C8D653DAE0D1} = {A4CDA2DC-9463-4C4E-9215-C8D653DAE0D1}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -31,6 +36,14 @@ Global
 		{979386C5-05B0-4477-9980-0656E42F3512}.Release|Win32.Build.0 = Release|Win32
 		{979386C5-05B0-4477-9980-0656E42F3512}.Release|x64.ActiveCfg = Release|x64
 		{979386C5-05B0-4477-9980-0656E42F3512}.Release|x64.Build.0 = Release|x64
+		{D3E73157-56A1-47F3-B953-332BE7065B81}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D3E73157-56A1-47F3-B953-332BE7065B81}.Debug|Win32.Build.0 = Debug|Win32
+		{D3E73157-56A1-47F3-B953-332BE7065B81}.Debug|x64.ActiveCfg = Debug|x64
+		{D3E73157-56A1-47F3-B953-332BE7065B81}.Debug|x64.Build.0 = Debug|x64
+		{D3E73157-56A1-47F3-B953-332BE7065B81}.Release|Win32.ActiveCfg = Release|Win32
+		{D3E73157-56A1-47F3-B953-332BE7065B81}.Release|Win32.Build.0 = Release|Win32
+		{D3E73157-56A1-47F3-B953-332BE7065B81}.Release|x64.ActiveCfg = Release|x64
+		{D3E73157-56A1-47F3-B953-332BE7065B81}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

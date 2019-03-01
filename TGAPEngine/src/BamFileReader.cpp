@@ -320,7 +320,8 @@ namespace engine{
 
 	Scene * BamFileReader::loadScene(const char filepath[], bool containHeader){
 		file.open(filepath, std::ios::in | std::ios::binary);
-		if (file.is_open()) std::cout << "otwarto plik " << filepath << std::endl;
+		if (file.is_open()) 
+			std::cout << "otwarto plik " << filepath << std::endl;
 		unsigned short tag;
 		file.read((char*)&tag, sizeof(unsigned short));
 		//std::cout << sizeof(unsigned short) << std::endl;

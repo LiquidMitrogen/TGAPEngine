@@ -147,6 +147,7 @@
     <None Include="res\test\wtf.bams">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="res\test\actionstest.bams" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Action.h">

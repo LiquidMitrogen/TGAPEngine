@@ -1,6 +1,7 @@
 #ifndef BONE_H
 #define BONE_H
 #define GLM_FORCE_RADIANS
+#define GLM_ENABLE_EXPERIMENTAL
 #include <string>
 #include <glm/glm.hpp>
 #include <glm/gtx/matrix_interpolation.hpp>

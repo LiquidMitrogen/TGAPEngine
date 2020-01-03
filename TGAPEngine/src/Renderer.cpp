@@ -36,7 +36,7 @@ namespace engine{
 		perspectivePoints[6] = glm::vec3(0.0, -1.0, 1.0);
 		perspectivePoints[7] = glm::vec3(0.0, 1.0, 1.0);
 
-		perspectivePoints[9] = glm::vec3(0.0, 0.0, -73.0);
+		perspectivePoints[8] = glm::vec3(0.0, 0.0, -73.0);
 		perspectivePoints[9] = glm::vec3(0.0, 0.0, 1.0);
 
 		//const float vertexPos[]{

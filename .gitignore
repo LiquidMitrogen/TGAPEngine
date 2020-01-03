@@ -6,6 +6,8 @@
 *.user
 *.sln.docstates
 
+# DLLS folder
+DLLS/
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

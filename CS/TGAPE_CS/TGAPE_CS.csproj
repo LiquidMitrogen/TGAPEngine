@@ -58,6 +58,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -87,10 +88,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Csgl\CSGL.cs" />
+    <Compile Include="Engine\Game\Entity.cs" />
+    <Compile Include="Engine\Game\Scene.cs" />
     <Compile Include="Engine\MainEngine.cs" />
+    <Compile Include="Engine\Math\MatrixHelper.cs" />
     <Compile Include="Engine\Renderer\Camera.cs" />
+    <Compile Include="Engine\Renderer\DrawingContext.cs" />
     <Compile Include="Engine\Renderer\Light.cs" />
     <Compile Include="Engine\Renderer\Renderer.cs" />
+    <Compile Include="Engine\Renderer\VertexAttributes.cs" />
     <Compile Include="Engine\Window.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

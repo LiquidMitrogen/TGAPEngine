@@ -3,12 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using TGAPE_CS.Engine.Renderer;
 
 namespace TGAPE_CS.Engine
 {
     public class MainEngine
     {
+        private SceneRenderer sceneRenderer;
         public event Glfw3.GLFWerrorfun OnErrorCallback;
         public event Glfw3.GLFWwindowsizefun OnWindowResize;
 
@@ -49,7 +52,7 @@ namespace TGAPE_CS.Engine
             Glfw3.glfwWindowHint(Glfw3.GLFW_SRGB_CAPABLE, OpenGL.GL_TRUE);
             Glfw3.glfwWindowHint(Glfw3.GLFW_SAMPLES, 4);
             _windowPointer = Glfw3.glfwCreateWindow(Window.windowWidth, Window.windowHeight, "App", IntPtr.Zero, IntPtr.Zero);
-            if(_windowPointer == IntPtr.Zero)
+            if (_windowPointer == IntPtr.Zero)
             {
                 Glfw3.glfwTerminate();
                 //TODO:throw some exceptions
@@ -58,11 +61,11 @@ namespace TGAPE_CS.Engine
             Glfw3.glfwSetWindowSizeCallback(_windowPointer, OnWindowResize);
             Glfw3.glfwMakeContextCurrent(_windowPointer);
             Glfw3.glfwSwapInterval(1);
-            if(Glfw3.glfwExtensionSupported("GL_ARB_texture_non_power_of_two") == Glfw3.GLFW_TRUE)
+            if (Glfw3.glfwExtensionSupported("GL_ARB_texture_non_power_of_two") == Glfw3.GLFW_TRUE)
             {
                 Console.WriteLine("NPOT textures supported");
             }
-            
+
 
         }
         public MainEngine(int windowWidth, int windowHeight)
@@ -78,6 +81,27 @@ namespace TGAPE_CS.Engine
             CSGL.CSGL.csglLoadGL();
             InitializeOpenGLParams();
 
+
+        }
+        public void MainLoop()
+        {
+            while(Glfw3.glfwWindowShouldClose(_windowPointer) == Glfw3.GLFW_FALSE)
+            {
+                if (sceneRenderer != null)
+                {
+                    OpenGL.glClear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
+                    sceneRenderer.DrawingPass();
+                }
+                Glfw3.glfwSwapBuffers(_windowPointer);
+                Glfw3.glfwPollEvents();
+                //TODO:do a C# Stopwatch to measure time
+                Thread.Sleep(30);
+
+            }
+            
+        }
+        public void Testing()
+        {
 
         }
     }

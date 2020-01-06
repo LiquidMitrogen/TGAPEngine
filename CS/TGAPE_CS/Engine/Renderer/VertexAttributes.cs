@@ -9,11 +9,24 @@ namespace TGAPE_CS.Engine.Renderer
 {
     public struct VaoInitData
     {
-        public byte AttrbuteCount;
+        const int size = 161;
+        public byte AttributeCount;
         public byte[] AttributeSize;
         public uint[] AttributeType;
         public byte[] AttributeNormal;
         public uint[] AttributeOffset;
+        //public VaoInitData(byte[] bytes)
+        //{
+        //    //1 + 4 * 16 + 4 * 16 + 16 + 16 = 161
+        //    if(bytes.Length != 161)
+        //    {
+        //        AttributeCount = bytes[0];
+        //        AttributeSize = new byte[16];
+        //        Array.Copy(bytes, 1, AttributeSize, 0, 16);
+        //        AttributeType = new uint[16];
+
+        //    }
+        //}
     }
     public class VertexAttributes
     {
@@ -22,6 +35,20 @@ namespace TGAPE_CS.Engine.Renderer
         private uint _vaoBufferHandle;
 
         public uint IndiceCount;
+        public VertexAttributes()
+        {
+
+        }
+        public VertexAttributes(byte[] data, ushort[] indiceData, VaoInitData vaoInitData)
+        {
+            CreateBuffer(data, indiceData);
+            CreateVertexArray(vaoInitData);
+        }
+        public VertexAttributes(byte [] data, uint[] indiceData, VaoInitData vaoInitData)
+        {
+            CreateBuffer(data, indiceData);
+            CreateVertexArray(vaoInitData);
+        }
 
         private void _createBuffer(byte[] data, uint additionalBufferSize)
         {
@@ -37,7 +64,7 @@ namespace TGAPE_CS.Engine.Renderer
 
             IndiceCount = 0;
         }
-        private void _createBuffer(byte[] data, ushort[] indiceData)
+        private void CreateBuffer(byte[] data, ushort[] indiceData)
         {
             OpenGL.glGenBuffers(1, ref _vboBufferHandle);
             OpenGL.glBindBuffer(OpenGL.GL_ARRAY_BUFFER, _vboBufferHandle);
@@ -58,7 +85,7 @@ namespace TGAPE_CS.Engine.Renderer
             }
             OpenGL.glBindBuffer(OpenGL.GL_ELEMENT_ARRAY_BUFFER, 0);
         }
-        private void _createBuffer(byte[] data, uint[] indiceData)
+        private void CreateBuffer(byte[] data, uint[] indiceData)
         {
             OpenGL.glGenBuffers(1, ref _vboBufferHandle);
             OpenGL.glBindBuffer(OpenGL.GL_ARRAY_BUFFER, _vboBufferHandle);
@@ -79,18 +106,18 @@ namespace TGAPE_CS.Engine.Renderer
             }
             OpenGL.glBindBuffer(OpenGL.GL_ELEMENT_ARRAY_BUFFER, 0);
         }
-        private void _createVertexArray(VaoInitData vaoInitData)
+        private void CreateVertexArray(VaoInitData vaoInitData)
         {
             OpenGL.glGenVertexArrays(1, ref _vaoBufferHandle);
             OpenGL.glBindVertexArray(_vaoBufferHandle);
             OpenGL.glBindBuffer(OpenGL.GL_ARRAY_BUFFER, _vboBufferHandle);
             OpenGL.glBindBuffer(OpenGL.GL_ELEMENT_ARRAY_BUFFER, _iVboBufferHandle);
-            if(vaoInitData.AttrbuteCount > 16)
+            if(vaoInitData.AttributeCount > 16)
             {
                 Console.WriteLine("Warning : attribute count is greater than 16");
-                vaoInitData.AttrbuteCount = 16;
+                vaoInitData.AttributeCount = 16;
             }
-            for(uint i = 0; i < vaoInitData.AttrbuteCount; i++)
+            for(uint i = 0; i < vaoInitData.AttributeCount; i++)
             {
                 OpenGL.glEnableVertexAttribArray(i);
                 if(vaoInitData.AttributeType[i] == OpenGL.GL_FLOAT)

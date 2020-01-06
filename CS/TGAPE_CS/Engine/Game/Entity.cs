@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CSGL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -14,7 +15,6 @@ namespace TGAPE_CS.Engine.Game
         //TODO: raplacing the bools with attributes if not more resource intensive
         //Entity should be a base class, and definitely should not have a VA Buffer
         private VertexAttributes _vertexAttributes;
-        private List<Entity> _children;
         private Matrix4x4 _modelToWorldTransformationMatrix;
         private Vector3 _location;
         private Quaternion _rotation;
@@ -29,6 +29,7 @@ namespace TGAPE_CS.Engine.Game
         public bool isMakingShadow = true;
         public bool isDisableDepthTests = true;
         public bool isDisableDrawing = true;
+        public Material entityMaterial;
 
         public Matrix4x4 ModelToWorldTransformationMatrix
         {
@@ -45,6 +46,8 @@ namespace TGAPE_CS.Engine.Game
         }
 
         public Entity Parent { get; set; }
+        public List<Image> Textures { get; set; }
+        public List<Entity> Children { get; set; }
 
         public Entity(VertexAttributes vertexAttributes)
         {
@@ -137,19 +140,57 @@ namespace TGAPE_CS.Engine.Game
         {
             return new Entity(this._vertexAttributes);
         }
+        public void Prepare()
+        {
+            foreach(var texture in Textures)
+            {
+                texture.Use();
+            }
+            _vertexAttributes.Use();
+            entityMaterial.Use();
+        }
+        public void CleanUp()
+        {
+            foreach(var texture in Textures)
+            {
+                texture.Reject();
+            }
+        }
         //TODO:can I get rid of the opengl code from this?
         public void Draw(Matrix4x4 parentMatrix, DrawingContext drawingContext)
         {
             var combinedMatrix = ModelToWorldTransformationMatrix * parentMatrix;
             if (!isDisableDrawing)
             {
-                /////////---------------------
+                Prepare();
+                entityMaterial.SetUniformLightsCount((uint)drawingContext.ActiveLights.Count);
+                for(int i = 0; i < drawingContext.ActiveLights.Count; i++)
+                {
+                    entityMaterial.SetUniformLightColor(drawingContext.ActiveLights[i].Color, i);
+                    entityMaterial.SetUniformLightDirection(drawingContext.ActiveLights[i].IsDirectional ? 
+                        drawingContext.ActiveLights[i].Direction 
+                        : drawingContext.ActiveLights[i].Location, i);
+                    entityMaterial.SetUniformPointLight(!drawingContext.ActiveLights[i].IsDirectional, i);
+                }
+                entityMaterial.SetUniformWorldToCamera(drawingContext.ActiveCamera.WorldToCameraSpaceTransformationMatrix);
+                entityMaterial.SetUniformCameraToClip(drawingContext.ActiveCamera.CameraToClipSpaceTransformationMatrix);
+                entityMaterial.SetUniformModelToWorld(combinedMatrix);
+
+                if (isDisableDepthTests)
+                    OpenGL.glDisable(OpenGL.GL_DEPTH_TEST);
+                OpenGL.glDrawElements(OpenGL.GL_TRIANGLES, (int)_vertexAttributes.IndiceCount, OpenGL.GL_UNSIGNED_INT, IntPtr.Zero);
+                CleanUp();
+                if (isDisableDepthTests)
+                    OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
             }
-            foreach(var child in _children)
+            foreach(var child in Children)
             {
                 child.Draw(combinedMatrix, drawingContext);
             }
         }
-
+        public Entity FindChildByName(string name)
+        {
+            return Children.FirstOrDefault(x => x.name.Equals(name));
+        }
     }
 }

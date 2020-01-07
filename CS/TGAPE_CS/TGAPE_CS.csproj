@@ -98,6 +98,7 @@
     <Compile Include="Engine\Renderer\Image.cs" />
     <Compile Include="Engine\Renderer\Light.cs" />
     <Compile Include="Engine\Renderer\Material.cs" />
+    <Compile Include="Engine\Renderer\MaterialPremade\SingleMatrixMaterial.cs" />
     <Compile Include="Engine\Renderer\SceneRenderer.cs" />
     <Compile Include="Engine\Renderer\VertexAttributes.cs" />
     <Compile Include="Engine\Window.cs" />

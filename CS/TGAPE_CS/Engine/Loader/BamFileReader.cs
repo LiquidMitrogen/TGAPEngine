@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TGAPE_CS.Engine.Game;
 using TGAPE_CS.Engine.Renderer;
+using TGAPE_CS.Engine.Renderer.MaterialPremade;
 
 namespace TGAPE_CS.Engine.Loader
 {
@@ -159,11 +160,12 @@ namespace TGAPE_CS.Engine.Loader
             return entity;
 
         }
-        public Scene LoadScene(string filepath, bool containHeader)
+        public static Scene LoadScene(string filepath)
         {
             if (!File.Exists(filepath))
             {
                 //TODO:exception
+                Debugger.Break();
                 return null;
             }
             using (var fileStream = File.OpenRead(filepath))
@@ -194,6 +196,7 @@ namespace TGAPE_CS.Engine.Loader
                     if (childrenCount > 0)
                     {
                         objectTree[objectId].childrenIds = new List<byte>(childrenCount);
+                        objectTree[objectId].childrenIds.AddRange(Enumerable.Repeat((byte)0, childrenCount));
                         for (int j = 0; j < childrenCount; j++)
                         {
                             byte childId = binaryReader.ReadByte();
@@ -202,6 +205,7 @@ namespace TGAPE_CS.Engine.Loader
                     }
                 }
                 var entityList = new List<Entity>(objectCount);
+                entityList.AddRange(Enumerable.Repeat((Entity)null, objectCount));
                 //TODO: load actors too
                 for (int i = 0; i < objectCount; i++)
                 {
@@ -221,9 +225,44 @@ namespace TGAPE_CS.Engine.Loader
 
                         }
                     }
+                    entityList[i].name = header.entityName;
+                    entityList[i].buildId = header.id;
+                    entityList[i].ApplyTranslation(header.location);
+                    entityList[i].ApplyRotation(header.rotation);
+                    entityList[i].ApplyScale(header.scale);
+                    if (header.type != EntityType.Armature)
+                    {
+                        //TODO:choose material based on additional metadata
+                        entityList[i].entityMaterial = new SingleMatrixMaterial(header.vertexShaderStr, header.fragmentShaderStr);
+                    }
                 }
+                //TODO:AnimatedActors loop here
+                foreach (var parent in objectTree)
+                {
+                    var parentEntity = entityList.FirstOrDefault(x => x.buildId == parent.id);
+                    if (parentEntity == null)
+                    {
+                        //TODO:how come huh
+                        Debugger.Break();
+                        return null;
+                    }
+                    foreach (var childId in parent.childrenIds)
+                    {
+                        var childEntity = entityList.FirstOrDefault(x => x.buildId == childId);
+                        if (childEntity == null)
+                        {
+                            //TODO:how come huh
+                            Debugger.Break();
+                            return null;
+                        }
+                        parentEntity.Children.Add(childEntity);
+                        childEntity.Parent = parentEntity;
+                    }
+                }
+                var entitiesToAdd = entityList.Where(x => x != null && x.Parent == null);
+                var newScene = new Scene(entitiesToAdd);
+                return newScene;
             }
-            return null;
         }
     }
 }

@@ -11,6 +11,14 @@ namespace TGAPE_CS.Engine.Game
     public class Scene
     {
         public List<Entity> Entities { get; set; }
+        public Scene()
+        {
+            Entities = new List<Entity>();
+        }
+        public Scene(IEnumerable<Entity> entities)
+        {
+            Entities = new List<Entity>(entities);
+        }
 
         public void Draw(DrawingContext context)
         {

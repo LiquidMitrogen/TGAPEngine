@@ -111,7 +111,8 @@ namespace TGAPE_CS.Engine.Renderer
         public void UpdateWorldToClipSpaceTransformationMatrix()
         {
             _worldToCameraSpaceTransformationMatrix = Matrix4x4.CreateLookAt(_location, _targetToLookAt, _upDirection);
-            _worldToClipSpaceTransformationMatrix = _cameraToClipSpaceTransformationMatrix * _worldToCameraSpaceTransformationMatrix;
+            //_worldToClipSpaceTransformationMatrix = _cameraToClipSpaceTransformationMatrix * _worldToCameraSpaceTransformationMatrix;
+            _worldToClipSpaceTransformationMatrix = _worldToCameraSpaceTransformationMatrix * _cameraToClipSpaceTransformationMatrix;
             _isNeedsUpdate = false;
         }
         public Vector3 GetMouseOnNearPlaneWorldSpace(float mouseXClipSpace, float mouseYClipSpace)

@@ -94,10 +94,10 @@ namespace TGAPE_CS.Engine.Loader
             var lz = binaryReader.ReadSingle();
             header.location = new Vector3(lx, ly, lz);
 
+            var qw = binaryReader.ReadSingle();
             var qx = binaryReader.ReadSingle();
             var qy = binaryReader.ReadSingle();
             var qz = binaryReader.ReadSingle();
-            var qw = binaryReader.ReadSingle();
             header.rotation = new Quaternion(qx, qy, qz, qw);
 
             var sx = binaryReader.ReadSingle();
@@ -246,18 +246,22 @@ namespace TGAPE_CS.Engine.Loader
                         Debugger.Break();
                         return null;
                     }
-                    foreach (var childId in parent.childrenIds)
+                    if (parent.childrenIds != null)
                     {
-                        var childEntity = entityList.FirstOrDefault(x => x.buildId == childId);
-                        if (childEntity == null)
+                        foreach (var childId in parent.childrenIds)
                         {
-                            //TODO:how come huh
-                            Debugger.Break();
-                            return null;
+                            var childEntity = entityList.FirstOrDefault(x => x.buildId == childId);
+                            if (childEntity == null)
+                            {
+                                //TODO:how come huh
+                                Debugger.Break();
+                                return null;
+                            }
+                            parentEntity.Children.Add(childEntity);
+                            childEntity.Parent = parentEntity;
                         }
-                        parentEntity.Children.Add(childEntity);
-                        childEntity.Parent = parentEntity;
                     }
+
                 }
                 var entitiesToAdd = entityList.Where(x => x != null && x.Parent == null);
                 var newScene = new Scene(entitiesToAdd);

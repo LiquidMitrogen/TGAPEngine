@@ -16,6 +16,9 @@ namespace TGAPE_CS.Engine
         public event Glfw3.GLFWwindowsizefun OnWindowResize;
 
         private IntPtr _windowPointer = IntPtr.Zero;
+
+        public SceneRenderer SceneRenderer { get => sceneRenderer; set => sceneRenderer = value; }
+
         private void ErrorCallback(int code, string description)
         {
             //TODO:handle glfw errors raised
@@ -29,7 +32,7 @@ namespace TGAPE_CS.Engine
         }
         private void InitializeOpenGLParams()
         {
-            OpenGL.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+            OpenGL.glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
             OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
             OpenGL.glDepthMask(OpenGL.GL_TRUE);
             OpenGL.glDepthFunc(OpenGL.GL_LEQUAL);
@@ -96,7 +99,6 @@ namespace TGAPE_CS.Engine
                 Glfw3.glfwPollEvents();
                 //TODO:do a C# Stopwatch to measure time
                 Thread.Sleep(30);
-
             }
             
         }

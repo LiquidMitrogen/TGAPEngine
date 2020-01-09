@@ -21,11 +21,12 @@ namespace TGAPE_CS.Engine.Renderer
         private Scene _auxScene;
         private DrawingContext _drawingContext;
         private List<Light> _lights;
-        private Camera _drawPassCamera;
+        public Camera _drawPassCamera;
         private Camera _shadowPassCamera;
 
         public static Matrix4x4 WorldToCameraTransformationMatrix;
 
+        public Scene ActiveScene { get => _activeScene; set => _activeScene = value; }
 
         public SceneRenderer(Camera drawingPassCamera, Light light)
         {

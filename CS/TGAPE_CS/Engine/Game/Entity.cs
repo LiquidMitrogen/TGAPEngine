@@ -5,7 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using TGAPE_CS.Engine.Math;
+using TGAPE_CS.Engine.VectorMath;
 using TGAPE_CS.Engine.Renderer;
 
 namespace TGAPE_CS.Engine.Game
@@ -26,9 +26,9 @@ namespace TGAPE_CS.Engine.Game
 
         public uint buildId = 0;
         public string name;
-        public bool isMakingShadow = true;
-        public bool isDisableDepthTests = true;
-        public bool isDisableDrawing = true;
+        public bool isMakingShadow = false;
+        public bool isDisableDepthTests = false;
+        public bool isDisableDrawing = false;
         public Material entityMaterial;
 
         public Matrix4x4 ModelToWorldTransformationMatrix
@@ -54,7 +54,10 @@ namespace TGAPE_CS.Engine.Game
             _location = Vector3.Zero;
             _rotation = Quaternion.Identity;
             _scale = Vector3.One;
+            _vertexAttributes = vertexAttributes;
             _isNeedsUpdate = true;
+            Children = new List<Entity>();
+            Textures = new List<Image>();
         }
         public Entity(Entity other)
         {
@@ -63,6 +66,8 @@ namespace TGAPE_CS.Engine.Game
             _scale = other._scale;
             _isNeedsUpdate = true;
             _vertexAttributes = other._vertexAttributes;//TODO:this copies handles to buffer watch out
+            Children = new List<Entity>();
+            Textures = new List<Image>();
         }
 
         private void UpdateMatrix()
@@ -159,7 +164,8 @@ namespace TGAPE_CS.Engine.Game
         //TODO:can I get rid of the opengl code from this?
         public void Draw(Matrix4x4 parentMatrix, DrawingContext drawingContext)
         {
-            var combinedMatrix = ModelToWorldTransformationMatrix * parentMatrix;
+            var combinedMatrix = parentMatrix * ModelToWorldTransformationMatrix;
+            
             if (!isDisableDrawing)
             {
                 Prepare();

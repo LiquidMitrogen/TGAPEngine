@@ -8,7 +8,7 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using TGAPE_CS.Engine.Math;
+using TGAPE_CS.Engine.VectorMath;
 
 namespace TGAPE_CS.Engine.Renderer
 {
@@ -49,6 +49,7 @@ namespace TGAPE_CS.Engine.Renderer
             if(!File.Exists(vertexFilePath) || !File.Exists(fragmentFilePath))
             {
                 //TODO:throw?
+                Debugger.Break();
                 return;
             }
             var vertexShaderHandle = OpenGL.glCreateShader(OpenGL.GL_VERTEX_SHADER);
@@ -59,7 +60,7 @@ namespace TGAPE_CS.Engine.Renderer
             int result = OpenGL.GL_FALSE;
             int infoLogLength = 0;
             
-            Console.WriteLine(string.Format("Compiling shader : {0}\n"), vertexFilePath);
+            Console.WriteLine(string.Format("Compiling shader : {0}\n", vertexFilePath));
             int lenghtOfVertexCode = vertexShaderCode.Length * sizeof(byte);
             IntPtr vetrexCodePointer = Marshal.AllocHGlobal(lenghtOfVertexCode);
             Marshal.Copy(vertexShaderCode, 0, vetrexCodePointer, vertexShaderCode.Length);
@@ -90,7 +91,7 @@ namespace TGAPE_CS.Engine.Renderer
 
             result = OpenGL.GL_FALSE;
             infoLogLength = 0;
-            Console.WriteLine(string.Format("Compiling shader : {0}\n"), fragmentFilePath);
+            Console.WriteLine(string.Format("Compiling shader : {0}\n", fragmentFilePath));
             int lenghtOfFragmentCode = fragmentShaderCode.Length * sizeof(byte);
             IntPtr fragmentCodePointer = Marshal.AllocHGlobal(lenghtOfFragmentCode);
             Marshal.Copy(fragmentShaderCode, 0, fragmentCodePointer, lenghtOfFragmentCode);
@@ -161,17 +162,17 @@ namespace TGAPE_CS.Engine.Renderer
         public void SetUniformModelToWorld(Matrix4x4 modelToWorld)
         {
             var matrixAsArray = MatrixHelper.ConvertToAnArray(modelToWorld);
-            OpenGL.glUniformMatrix4fv(_modelToWorldSpaceUniformHandle, 1, OpenGL.GL_TRUE, ref matrixAsArray[0]);
+            OpenGL.glUniformMatrix4fv(_modelToWorldSpaceUniformHandle, 1, OpenGL.GL_FALSE, ref matrixAsArray[0]);
         }
         public void SetUniformCameraToClip(Matrix4x4 cameraToClip)
         {
             var matrixAsArray = MatrixHelper.ConvertToAnArray(cameraToClip);
-            OpenGL.glUniformMatrix4fv(_cameraToClipSpaceUniformHandle, 1, OpenGL.GL_TRUE, ref matrixAsArray[0]);
+            OpenGL.glUniformMatrix4fv(_cameraToClipSpaceUniformHandle, 1, OpenGL.GL_FALSE, ref matrixAsArray[0]);
         }
         public void SetUniformWorldToCamera(Matrix4x4 worldToCamera)
         {
             var matrixAsArray = MatrixHelper.ConvertToAnArray(worldToCamera);
-            OpenGL.glUniformMatrix4fv(_worldToCameraSpaceUniformHandle, 1, OpenGL.GL_TRUE, ref matrixAsArray[0]);
+            OpenGL.glUniformMatrix4fv(_worldToCameraSpaceUniformHandle, 1, OpenGL.GL_FALSE, ref matrixAsArray[0]);
         }
         public void SetUniformLightDirection(Vector4 lightDirection, int lightIndex)
         {

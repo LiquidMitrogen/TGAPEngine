@@ -1,4 +1,4 @@
-#ob.animation_data.action = bpy.data.actions['Spin'] -- this is how how you change actions for armature before export
+
 bl_info = {
 	"name": "Export BAM format to BAMS",
 	"author": "Szymon Biernacki (mazoot)",
@@ -53,10 +53,6 @@ def add_to_objectslist(objects,object):
 	if(object.type != 'MESH'):
 		return False
 	objects.append(object)
-	ar = object.find_armature()
-	if(ar != None):
-		if(ar not in objects):
-			objects.append(ar)
 	for child in object.children:
 		add_to_objectslist(objects,child)
 	return True
@@ -67,7 +63,7 @@ def do_export_bams(context,filepath,props):
 	for selected in context.selected_objects:
 		add_to_objectslist(objects,selected)
 	for i,selected in enumerate(objects):
-		if(selected.type in ('MESH','ARMATURE')):
+		if(selected.type == 'MESH'):
 			objectsdict[selected] = i
 			print(selected)
 			print(i)
@@ -78,154 +74,31 @@ def do_export_bams(context,filepath,props):
 	print(objects)
 	print(objectsdict)
 	print('----------------')
-	file.write(struct.pack('h', 0x4241))#BA
-	print('written BA tag')
-	file.write(struct.pack('B',len(objects)))
-	print('written objects length')
+	file.write(struct.pack('<B',len(objects)))
 	print(len(objects))
 	print('objects')
 	for selected,ide in objectsdict.items():
-		file.write(struct.pack('B',ide))
-		print('written object id')
+		file.write(struct.pack('<B',ide))
 		print(ide)
 		print('has')
 		children = list()
 		for child in selected.children:
 			if(child.type == 'MESH'):
 				children.append(child)
-		file.write(struct.pack('B',len(children)))
-		print('written len of children')
+		file.write(struct.pack('<B',len(children)))
 		print(len(children))
 		print(' :: ')
 		for child in children:
-			file.write(struct.pack('B',objectsdict[child]))
-			print('written one of children ids')
+			file.write(struct.pack('<B',objectsdict[child]))
 			print(objectsdict[child])
 	for selected,ide in objectsdict.items():
 		print('exporting',ide)
-		if(selected.type == 'MESH'):
-			do_export(file,context,props,selected,ide)
-		if(selected.type == 'ARMATURE'):
-			do_export_armature(file,context,props,selected,ide)
+		do_export(file,context,props,selected,ide)
 	file.flush()
 	file.close()
 	return True
-	
-def do_export_armature(file,context,props,object,objectid):
-	print("exporting armature")
-	ob = object
-	ar = object
-	sc = context.scene
-	####################################################### Header
-	file.write(struct.pack('h', 0x4152))#AR
-	print('written AR tag')
-	file.write(struct.pack('B',objectid))
-	file.write(struct.pack('B',0))
-	nameCount = len(ob.name)
-	ob.rotation_mode = 'QUATERNION'
-	file.write(struct.pack('I%ds' % (nameCount) ,nameCount,bytes(ob.name,'ascii')))#object name length and object name
-	file.write(struct.pack('fff',ob.location.x,ob.location.z,-ob.location.y))#location of object
-	
-	obrot = ob.rotation_quaternion
-	file.write(struct.pack('ffff',obrot.w,obrot.x,obrot.z,-obrot.y))#rotation of object
-	file.write(struct.pack('fff',ob.scale.x,ob.scale.z,ob.scale.y))#scale of object
-	file.write(struct.pack('I' ,0))#no vertex_shader or empty
-	file.write(struct.pack('I' ,0))#no fragmen_shader or empty
-##################################################### /Header
-	
-	columnFormat = '4f'
-	sc.objects.active = ar;
-	ar = bpy.context.active_object
-	file.write(struct.pack('I',len(ar.pose.bones)))#number of bones
-	boneNameToIndex = dict()
-	for i,bone in enumerate(ar.pose.bones):
-		boneNameToIndex[bone.name] = i
-	
-	for i,bone in enumerate(ar.pose.bones):
-		count = len(bone.name)
-		print(count)
-		file.write(struct.pack('I%ds' % (count) ,count,bytes(bone.name,'ascii')))#bone name length and bone name
-		file.write(struct.pack('I',len(bone.children)))# number of bone children ids
-		for child in bone.children:
-			file.write(struct.pack('I',boneNameToIndex[child.name]))#bone children ids
-		matrix = ar.data.bones[bone.name].matrix_local.inverted()
-		print(matrix)
-		matrixLT = matrixRtoLTransposed(matrix)
-		print(matrixLT)
-		for row in matrixLT:
-			file.write(struct.pack(columnFormat,*row))#bone armature local parentToBone matrix 
-	
-	actionString = ar.data.actions
-	actions = actionString.split(",")
-	actionNum = len(actions)
-	file.write(struct.pack('I',actionNum))#number of viable actions for export
-	for actionS in actions:
-		action = bpy.data.actions[actionS]
-		if(action == None):
-			print("action not found")
-			continue
-		actionNameLen = len(action.name)
-		print("action ", action.name)
-		file.write(struct.pack('I%ds' % (actionNameLen) ,actionNameLen,bytes(action.name,'ascii')))#Action name length and action name
-		file.write(struct.pack('I',math.floor(action.frame_range[0])))#action range start
-		file.write(struct.pack('I',math.floor(action.frame_range[1])))#action range end
-		
-		ar.animation_data.action = action
-		sc.objects.active = ar;
-		ar = bpy.context.active_object
-		keyframeCounts=1
-		sc.show_keys_from_selected_only = False
-		bpy.ops.screen.frame_jump(end = False)
-		keyframeIndices = list()
-		while True:
-			keyframeIndices.append(sc.frame_current)#list of keyframe frame numbers
-			result = bpy.ops.screen.keyframe_jump(next = True)
-			if(result.pop() != 'FINISHED'):
-				break
-			keyframeCounts+=1
-	
-	
-		quatFormat = '4f'
-		locFormat = '3f'
-		
-		keyframeToLocDict = dict()
-		keyframeToQuatDict = dict()
-		for i,v in enumerate(keyframeIndices):
-			sc.frame_set(v)
-			ar = bpy.context.active_object
-			boneNameToQuat = dict()
-			boneNameToLoc = dict()
-			boneDiff(ar.pose.bones[0],boneNameToQuat,boneNameToLoc,ar) #fills both dictionaries with data from all bones 
-			keyframeToQuatDict[v] = boneNameToQuat #each keyframe has complete quats and locs for bone hierarchy in different position
-			keyframeToLocDict[v] = boneNameToLoc
-		
-		for i,bone in enumerate(ar.pose.bones):
-			file.write(struct.pack('I',boneNameToIndex[bone.name]))#id of current bone
-			file.write(struct.pack('I',keyframeCounts))#number of keyframes for the bone
-			bpy.ops.screen.frame_jump(end = False)
-			for i,v in enumerate(keyframeIndices):#for every keyframe
-				sc.frame_set(v)
-				print(v)
-				#if(i==0):
-				#	rangeMin = v
-				#else:
-				#	rangeMin = keyframeIndices[i-1] + 1#|s......|.......e|
-				#if(i==len(keyframeIndices) - 1):
-				#	rangeMax = v
-				#else:
-				#	rangeMax = keyframeIndices[i+1] - 1
-				quat = keyframeToQuatDict[v][bone.name]
-				loc =  keyframeToLocDict[v][bone.name]
-				print(quat)
-				print(loc)
-				file.write(struct.pack(quatFormat,quat.w,quat.x,quat.z,-quat.y))#bone pose quaternion in modelspace
-				file.write(struct.pack(locFormat,loc.x,loc.z,-loc.y))#bone location in model space
-				#file.write(struct.pack('I',rangeMin))
-				#file.write(struct.pack('I',rangeMax))
-				file.write(struct.pack('I',v))
-	
 def do_export(file,context, props, object, objectid):
-	print("exporting mesh")
+	
 	glByte = 0x1400
 	glShort = 0x1402
 	glInt = 0x1404
@@ -242,7 +115,7 @@ def do_export(file,context, props, object, objectid):
 	vertCount = len(me.vertices)
 	headerFormat='<12siiffi'
 	configurationByte = 0;
-	VaoInitStructFormat = 'B16B16I16B16I'
+	VaoInitStructFormat = '<B16B16I16B16I'
 	attrNumber = 4; #vertices, normals, weights and bone indices,texcoords(optional)
 	if(ar == None):
 		attrNumber = 2;
@@ -255,18 +128,14 @@ def do_export(file,context, props, object, objectid):
 	if(ar == None):
 		configurationByte += 4; #0x04 no bones
 ####################################################### Header
-	file.write(struct.pack('h', 0x4f42))#OB
-	print('written OB tag')
-	file.write(struct.pack('B',objectid))
-	file.write(struct.pack('B',configurationByte))
+	file.write(struct.pack('<B',objectid))
+	file.write(struct.pack('<B',configurationByte))
 	nameCount = len(ob.name)
-	ob.rotation_mode = 'QUATERNION'
-	file.write(struct.pack('I%ds' % (nameCount) ,nameCount,bytes(ob.name,'ascii')))#object name length and object name
-	file.write(struct.pack('fff',ob.location.x,ob.location.z,-ob.location.y))#location of object
-	
+	file.write(struct.pack('<I%ds' % (nameCount) ,nameCount,bytes(ob.name,'ascii')))#object name length and object name
+	file.write(struct.pack('<fff',ob.location.x,ob.location.z,-ob.location.y))#location of object
 	obrot = ob.rotation_quaternion
-	file.write(struct.pack('ffff',obrot.w,obrot.x,obrot.z,-obrot.y))#rotation of object
-	file.write(struct.pack('fff',ob.scale.x,ob.scale.z,ob.scale.y))#scale of object
+	file.write(struct.pack('<ffff',obrot.w,obrot.x,obrot.z,-obrot.y))#rotation of object
+	file.write(struct.pack('<fff',ob.scale.x,ob.scale.z,ob.scale.y))#scale of object
 	
 	vstr = ob.get('vertex_shader',-1)
 	vstrCount = 0
@@ -276,10 +145,10 @@ def do_export(file,context, props, object, objectid):
 		vstrCount = len(vstr)
 	if vstrCount == 0:
 		print('writing 0 to vlen')
-		file.write(struct.pack('I' ,0))#no vertex_shader or empty
+		file.write(struct.pack('<I' ,0))#no vertex_shader or empty
 	else:
 		print('writing v ',vstrCount,' len str ',vstr)
-		file.write(struct.pack('I%ds' % (vstrCount) ,vstrCount,bytes(vstr,'ascii')))#vertex_shader string
+		file.write(struct.pack('<I%ds' % (vstrCount) ,vstrCount,bytes(vstr,'ascii')))#vertex_shader string
 	print('vstr len ', vstrCount)
 	print('vstr ', vstr)
 	fstr = ob.get('fragment_shader',-1)
@@ -290,10 +159,10 @@ def do_export(file,context, props, object, objectid):
 		fstrCount = len(fstr)
 	if fstrCount == 0:
 		print('writing 0 to vlen')
-		file.write(struct.pack('I' ,0))#no vertex_shader or empty
+		file.write(struct.pack('<I' ,0))#no vertex_shader or empty
 	else:
 		print('writing f ',fstrCount,' len str ',fstr)
-		file.write(struct.pack('I%ds' % (fstrCount) ,fstrCount,bytes(fstr,'ascii')))#vertex_shader string
+		file.write(struct.pack('<I%ds' % (fstrCount) ,fstrCount,bytes(fstr,'ascii')))#vertex_shader string
 	print('fstr len ', fstrCount)
 	print('fstr ', fstr)
 ##################################################### /Header
@@ -332,18 +201,18 @@ def do_export(file,context, props, object, objectid):
 	#buforSize = (2 * vertCount * 3 * 4) + (vertCount * 4 * 4) + (vertCount * 4)
 	#if(props.export_textures):
 		#buforSize = buforSize + (vertCount * 2 * 4)
-	file.write(struct.pack('I',buforSize))
-	vertexFormat = 'fff'
+	file.write(struct.pack('<I',buforSize))
+	vertexFormat = '<fff'
 	for vertex in me.vertices:
 		vertexStr = struct.pack(vertexFormat,vertex.co.x,vertex.co.z,-vertex.co.y)
 		file.write(vertexStr)
-	normalFormat = 'fff'
+	normalFormat = '<fff'
 	for vertex in me.vertices:
 		normalStr = struct.pack(normalFormat,vertex.normal.x,vertex.normal.z,-vertex.normal.y)
 		file.write(normalStr)
 #############################################
 	if(ar != None):
-		weightFormat = 'ffff'
+		weightFormat = '<ffff'
 		for vertex in me.vertices:
 			groups = list(vertex.groups)
 			weights = list()
@@ -357,7 +226,7 @@ def do_export(file,context, props, object, objectid):
 			#print(weights)
 			weightStr = struct.pack(weightFormat,*weights)
 			file.write(weightStr)
-		weightIndFormat = 'BBBB'
+		weightIndFormat = '<BBBB'
 		pair = dict()
 		for i,v in enumerate(ar.pose.bones):
 			try:
@@ -379,8 +248,7 @@ def do_export(file,context, props, object, objectid):
 			file.write(weightIndStr)
 ############################# texcoords
 	if(ob.get('export_textures',-1) == 1):
-		print("exporting texcoords")
-		texcoordFormat = 'ff'
+		texcoordFormat = '<ff'
 		for i,vertex in enumerate(me.vertices):
 			for j,o in enumerate(me.uv_layers.active.data):
 				if(me.loops[j].vertex_index == i):
@@ -389,8 +257,7 @@ def do_export(file,context, props, object, objectid):
 					break
 ##############################
 	if(ob.get('export_tangents',-1) == 1):
-		print("exporting tengents")
-		tangentsFormat = 'fff'
+		tangentsFormat = '<fff'
 		for i,vertex in enumerate(me.vertices):
 			xyz = mathutils.Vector((0.0,0.0,0.0))
 			for j,loop in enumerate(me.loops):
@@ -401,7 +268,7 @@ def do_export(file,context, props, object, objectid):
 			file.write(tangentStr)
 #############################
 	if(ob.get('export_tangents',-1) == 1):
-		bitangentFormat = 'fff'
+		bitangentFormat = '<fff'
 		for i,vertex in enumerate(me.vertices):
 			xyz = mathutils.Vector((0.0,0.0,0.0))
 			for j,loop in enumerate(me.loops):
@@ -411,9 +278,9 @@ def do_export(file,context, props, object, objectid):
 			bitangentStr = struct.pack(bitangentFormat,xyz.x,xyz.z,-xyz.y)
 			file.write(bitangentStr)
 #############################
-	indicesCountFormat = 'I'
+	indicesCountFormat = '<I'
 	file.write(struct.pack(indicesCountFormat,(len(me.polygons) * 3 * 4)))
-	indicesFormat = 'III'
+	indicesFormat = '<III'
 	for triangle in me.polygons:
 		indicesStr = struct.pack(indicesFormat,*triangle.vertices) 
 		file.write(indicesStr)
@@ -421,8 +288,72 @@ def do_export(file,context, props, object, objectid):
 	if(ar == None):
 		return True
 ##########################################
-	arNameCount = len(ar.name)
-	file.write(struct.pack('I%ds' % (arNameCount) ,arNameCount,bytes(ar.name,'ascii')))#armature name length and object name
+	sc.objects.active = ar;
+	ar = bpy.context.active_object
+	keyframeCounts=1
+	sc.show_keys_from_selected_only = False
+	bpy.ops.screen.frame_jump(end = False)
+	keyframeIndices = list()
+	while True:
+		keyframeIndices.append(sc.frame_current)
+		result = bpy.ops.screen.keyframe_jump(next = True)
+		if(result.pop() != 'FINISHED'):
+			break
+		keyframeCounts+=1
+	file.write(struct.pack('<I',len(ar.pose.bones)))#number of bones
+	boneMatrixFormat = '<III'
+	columnFormat = '<4f'
+	quatFormat = '<4f'
+	locFormat = '<3f'
+	boneNameToIndex = dict()
+	keyframeToLocDict = dict()
+	keyframeToQuatDict = dict()
+	for i,v in enumerate(keyframeIndices):
+		print(i,v)
+		sc.frame_set(v)
+		ar = bpy.context.active_object
+		boneNameToQuat = dict()
+		boneNameToLoc = dict()
+		boneDiff(ar.pose.bones[0],boneNameToQuat,boneNameToLoc,ar)
+		keyframeToQuatDict[v] = boneNameToQuat
+		keyframeToLocDict[v] = boneNameToLoc
+	for i,bone in enumerate(ar.pose.bones):
+		boneNameToIndex[bone.name] = i
+	for i,bone in enumerate(ar.pose.bones):
+		count = len(bone.name)
+		print(count)
+		file.write(struct.pack('<I%ds' % (count) ,count,bytes(bone.name,'ascii')))#bone name length and bone name
+		file.write(struct.pack('<I',len(bone.children)))# number of bone children ids
+		for child in bone.children:
+			file.write(struct.pack('<I',boneNameToIndex[child.name]))#bone children ids
+		matrix = ar.data.bones[bone.name].matrix_local.inverted()
+		print(matrix)
+		matrixLT = matrixRtoLTransposed(matrix)
+		print(matrixLT)
+		for row in matrixLT:
+			file.write(struct.pack(columnFormat,*row))#bone armature local parentToBone matrix 
+		file.write(struct.pack('<I',keyframeCounts))#number of keyframes for the bone
+		bpy.ops.screen.frame_jump(end = False)
+		for i,v in enumerate(keyframeIndices):#for every keyframe
+			sc.frame_set(v)
+			print(v)
+			if(i==0):
+				rangeMin = v
+			else:
+				rangeMin = keyframeIndices[i-1] + 1#|s......|.......e|
+			if(i==len(keyframeIndices) - 1):
+				rangeMax = v
+			else:
+				rangeMax = keyframeIndices[i+1] - 1
+			quat = keyframeToQuatDict[v][bone.name]
+			loc =  keyframeToLocDict[v][bone.name]
+			print(quat)
+			print(loc)
+			file.write(struct.pack(quatFormat,quat.w,quat.x,quat.z,-quat.y))#bone pose quaternion in modelspace
+			file.write(struct.pack(locFormat,loc.x,loc.z,-loc.y))#bone location in model space
+			file.write(struct.pack('<I',rangeMin))
+			file.write(struct.pack('<I',rangeMax))
+			file.write(struct.pack('<I',v))
 	return True
 
 
@@ -482,9 +413,6 @@ def menu_func(self, context):
 
 def register():
 	bpy.utils.register_module(__name__)
-	#bpy.types.Object.quaternion_localparent = Quaternion((1.0,0.0,0.0,0.0))
-	#bpy.types.Object.location_localparent = Vector((0.0,0.0,0.0))
-	#bpy.types.Object.scale_localparent = Vector((0.0,0.0,0.0))
 
 	bpy.types.INFO_MT_file_export.append(menu_func)
 	#bpy.types.VIEW3D_PT_tools_objectmode.prepend(menu_func)

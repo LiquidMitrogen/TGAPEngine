@@ -13,17 +13,13 @@ class ObjectBamsProperties(bpy.types.Operator):
 	export_textures = bpy.props.IntProperty(name="export_textures", default = 0, min = 0, max = 1)
 	vertex_shader = bpy.props.StringProperty(name = "vertex_shader_path", subtype='FILE_PATH')
 	fragment_shader = bpy.props.StringProperty(name = "fragment_shader_path", subtype='FILE_PATH')
-	actions = bpy.props.StringProperty(name = "actions")
 	def execute(self, context):
 		obj = context.active_object
-		ar = obj.find_armature()
 		obj.generate_smart_uvs = self.generate_smart_uvs
 		obj.export_tangents = self.export_tangents
 		obj.export_textures = self.export_textures
 		obj.vertex_shader = self.vertex_shader
 		obj.fragment_shader = self.fragment_shader
-		if(ar != None):
-			ar.data.actions = self.actions
 		return {'FINISHED'}
 def menu_func(self, context):
 	self.layout.operator(ObjectBamsProperties.bl_idname)
@@ -35,7 +31,6 @@ def register():
 	bpy.types.Object.export_textures = bpy.props.IntProperty(name="export_textures", default = 0, min = 0, max = 1)
 	bpy.types.Object.vertex_shader = bpy.props.StringProperty(name = "vertex_shader_path", subtype='FILE_PATH')
 	bpy.types.Object.fragment_shader = bpy.props.StringProperty(name = "fragment_shader_path", subtype='FILE_PATH')
-	bpy.types.Armature.actions = bpy.props.StringProperty(name = "actions")
 	bpy.utils.register_class(ObjectBamsProperties)
 	bpy.types.VIEW3D_MT_object.append(menu_func)
 	# handle the keymap

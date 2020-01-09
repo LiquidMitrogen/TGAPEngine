@@ -13,7 +13,7 @@ namespace TGAPE_CS
     {
         public static void Main()
         {
-
+            var engine = new MainEngine(800, 600);
             var scene = BamFileReader.LoadScene(@"C:\Users\szymo\Documents\TGAPEngine\TGAPEngine\res\cube.bams");
             Console.WriteLine("fffffffuuuuuuu");
         }

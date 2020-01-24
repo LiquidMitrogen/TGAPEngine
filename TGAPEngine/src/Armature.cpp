@@ -27,6 +27,7 @@ namespace engine{
 		return nullptr;
 	}
 	void Armature::applyActionByName(std::string actionName, unsigned int frame){
+		//BUG!
 		for (std::vector<Action>::iterator it = this->actions.begin(); it != this->actions.end(); it++){
 			this->rootBone->applyAction(&(*it), frame);
 		}

@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 namespace TGAPE_CS.Engine.Game
 {
     //TODO:maybe change some data structures and collection to optimize searching for a keyframe
-    public class ActionBoneKeyframes
+    public class ActionBoneKeyframe
     {
         public uint boneId;
         public List<Keyframe> keyframes;//must be ordered by frame
-        public ActionBoneKeyframes(uint boneId, List<Keyframe> keyframes)
+        public ActionBoneKeyframe(uint boneId, List<Keyframe> keyframes)
         {
             this.boneId = boneId;
             this.keyframes = keyframes;
@@ -21,18 +21,18 @@ namespace TGAPE_CS.Engine.Game
     };
     public class ActorAction
     {
-        protected List<ActionBoneKeyframes> boneKeyframes;
+        protected List<ActionBoneKeyframe> boneKeyframes;
 
         public uint rangeStart, rangeEnd;
         public string name;
 
-        public List<ActionBoneKeyframes> BoneKeyframes
+        public List<ActionBoneKeyframe> BoneKeyframes
         {
             get => boneKeyframes;
             set => boneKeyframes = value;
         }
 
-        public ActorAction(string name, uint rangeStart, uint rangeEnd, List<ActionBoneKeyframes> boneKeyframes) 
+        public ActorAction(string name, uint rangeStart, uint rangeEnd, List<ActionBoneKeyframe> boneKeyframes) 
         {
             this.name = name;
             this.rangeStart = rangeStart;

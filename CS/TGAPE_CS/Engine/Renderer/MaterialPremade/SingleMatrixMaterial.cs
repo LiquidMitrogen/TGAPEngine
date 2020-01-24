@@ -68,7 +68,7 @@ namespace TGAPE_CS.Engine.Renderer.MaterialPremade
             OpenGL.glUniform1i(_shininessTextureSamplerHandle, sampler);
         }
 
-        public SingleMatrixMaterial(string vertexFilePath, string fragmentFilePath, Vector4? ambientColor = null, Vector4? diffuseColor = null, Vector4? specularColor = null, float? shininess = null) : base(vertexFilePath, fragmentFilePath)
+        public SingleMatrixMaterial(string vertexFilePath, string fragmentFilePath, uint boneCount = 0, Vector4? ambientColor = null, Vector4? diffuseColor = null, Vector4? specularColor = null, float? shininess = null) : base(vertexFilePath, fragmentFilePath)
         {
             OpenGL.glUseProgram(_shaderProgramHandle);
 
@@ -87,8 +87,8 @@ namespace TGAPE_CS.Engine.Renderer.MaterialPremade
             SetUniformShininess(shininess != null ? shininess.Value : 128.0f);
 
             //TODO:dynamic bone number
-            _boneUniformHandles = new int[14];
-            for (int i = 0; i < 14; i++)
+            _boneUniformHandles = new int[boneCount];
+            for (int i = 0; i < boneCount; i++)
             {
                 _boneUniformHandles[i] = OpenGL.glGetUniformLocation(_shaderProgramHandle, string.Format("bone[{0}]", i.ToString("d")));
             }

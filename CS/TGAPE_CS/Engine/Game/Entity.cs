@@ -14,13 +14,12 @@ namespace TGAPE_CS.Engine.Game
     {
         //TODO: raplacing the bools with attributes if not more resource intensive
         //Entity should be a base class, and definitely should not have a VA Buffer
-        private VertexAttributes _vertexAttributes;
-        private Matrix4x4 _modelToWorldTransformationMatrix;
-        private Vector3 _location;
-        private Quaternion _rotation;
-        private Vector3 _scale;
-
-        private bool _isNeedsUpdate = false;
+        protected VertexAttributes _vertexAttributes;
+        protected Matrix4x4 _modelToWorldTransformationMatrix;
+        protected Vector3 _location;
+        protected Quaternion _rotation;
+        protected Vector3 _scale;
+        protected bool _isNeedsUpdate = false;
 
 
 
@@ -145,7 +144,7 @@ namespace TGAPE_CS.Engine.Game
         {
             return new Entity(this._vertexAttributes);
         }
-        public void Prepare()
+        public virtual void Prepare()
         {
             foreach(var texture in Textures)
             {

@@ -89,6 +89,8 @@
   <ItemGroup>
     <Compile Include="Csgl\CSGL.cs" />
     <Compile Include="Engine\Game\ActorAction.cs" />
+    <Compile Include="Engine\Game\AnimatedActor.cs" />
+    <Compile Include="Engine\Game\Armature.cs" />
     <Compile Include="Engine\Game\Bone.cs" />
     <Compile Include="Engine\Game\Entity.cs" />
     <Compile Include="Engine\Game\Keyframe.cs" />

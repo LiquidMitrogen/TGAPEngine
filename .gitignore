@@ -192,3 +192,5 @@ _Pvt_Extensions/
 ModelManifest.xml
 TGAPEngine.VC.db
 TGAPEngine.VC.VC.opendb
+Dependencies
+/TGAPEngine/TGAPEngineTargetDirectory

@@ -5,6 +5,7 @@
 #include<vector>
 #include<iostream>
 namespace engine{
+//#pragma pack(push, 1)
     typedef struct VaoInitData
     {
         unsigned char attrNumber;
@@ -14,6 +15,7 @@ namespace engine{
         unsigned int attrOffset[16];
 
     }VaoInitData;
+//#pragma pack(pop)
 class VertexAttributes
 {
     public:

@@ -197,8 +197,9 @@ namespace engine{
 		unsigned int i, j;
 
 		VaoInitData * vaoInit = new VaoInitData;
-
+		std::cout << sizeof(VaoInitData);
 		file.read((char *)vaoInit, sizeof(VaoInitData));
+		//data is not aligned with struct
 		//std::cout<<(unsigned int)vaoInit->attrNumber<<" attrNumber "<<std::endl;
 		//std::cout<<vaoInit->attrOffset[1] / (sizeof(float) * 3)<<std::endl;
 		unsigned int * buforSize = new unsigned int;
@@ -322,6 +323,9 @@ namespace engine{
 		file.open(filepath, std::ios::in | std::ios::binary);
 		if (file.is_open()) 
 			std::cout << "otwarto plik " << filepath << std::endl;
+		else
+			std::cout << "Error: " << strerror(errno);
+		//loadNoBoneFile();
 		unsigned short tag;
 		file.read((char*)&tag, sizeof(unsigned short));
 		//std::cout << sizeof(unsigned short) << std::endl;

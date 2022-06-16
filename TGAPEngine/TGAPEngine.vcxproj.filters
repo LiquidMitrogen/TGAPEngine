@@ -13,23 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
-    <Filter Include="Blender Scripts">
-      <UniqueIdentifier>{d6e94e5b-c7cc-4b4b-ba44-928b5b1cc86e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{c662ffb3-427a-4451-b9b2-065e33810322}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\Blender Scripts\io_export_bam.py">
-      <Filter>Blender Scripts</Filter>
-    </None>
-    <None Include="src\Blender Scripts\io_export_scene_bam.py">
-      <Filter>Blender Scripts</Filter>
-    </None>
-    <None Include="src\Blender Scripts\reg.py">
-      <Filter>Blender Scripts</Filter>
-    </None>
     <None Include="Shaders\equalizer.frag">
       <Filter>Shaders</Filter>
     </None>
@@ -148,6 +136,7 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="res\test\actionstest.bams" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Action.h">

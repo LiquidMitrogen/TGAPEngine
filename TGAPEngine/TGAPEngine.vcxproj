@@ -21,26 +21,26 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A4CDA2DC-9463-4C4E-9215-C8D653DAE0D1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <PlatformToolset>v141</PlatformToolset>
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -59,16 +59,30 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)ExternalLibs\freetype-windows-binaries-master\include;$(SolutionDir)ExternalLibs\freetype-windows-binaries-master\include\freetype;$(SolutionDir)ExternalLibs\glm;$(SolutionDir)ExternalLibs\glfw-3.2.1\include;$(SolutionDir)ExternalLibs\glew-2.1.0\include;$(SolutionDir)TGAPEngine\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)ExternalLibs\freetype-windows-binaries-master\win32;$(SolutionDir)ExternalLibs\glfw-3.2.1.bin.WIN32\lib-vc2015;$(SolutionDir)ExternalLibs\glew-2.1.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
-    <SourcePath>$(SolutionDir)TGAPEngine\src;$(SourcePath)</SourcePath>
+    <SourcePath>$(SourcePath)</SourcePath>
+    <OutDir>TGAPEngineTargetDirectory\</OutDir>
+    <GlfwLinkage>
+    </GlfwLinkage>
+    <Linkage-freetype>
+    </Linkage-freetype>
+    <Linkage-glew>
+    </Linkage-glew>
+    <ExternalIncludePath>C:\Users\szymo\Documents\TGAPEngine\packages\glew-2.2.0\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <IncludePath>$(SolutionDir)TGAPEngine\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <SourcePath>$(SourcePath)</SourcePath>
+    <OutDir>TGAPEngineTargetDirectory\</OutDir>
+    <GlfwLinkage>
+    </GlfwLinkage>
+    <Linkage-freetype>
+    </Linkage-freetype>
+    <Linkage-glew>
+    </Linkage-glew>
+    <ExternalIncludePath>C:\Users\szymo\Documents\TGAPEngine\packages\glew-2.2.0\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -79,11 +93,16 @@
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
-      <TargetMachine>MachineX86</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>glfw3dll.lib;glew32.lib;glu32.lib;opengl32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <FullProgramDatabaseFile>true</FullProgramDatabaseFile>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;freetype28d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\szymo\Documents\TGAPEngine\packages\freetype.2.8.0.1\build\native\lib\Win32\v141\dynamic\Debug;C:\Users\szymo\Documents\TGAPEngine\packages\glfw.3.3.7\build\native\lib\dynamic\v143\win32;C:\Users\szymo\Documents\TGAPEngine\packages\glew-2.2.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d  "$(SolutionDir)packages\glfw.3.3.7\build\native\bin\dynamic\v143\win32\*.dll" "$(ProjectDir)$(OutDir)"
+xcopy /y /d  "$(SolutionDir)packages\freetype.redist.2.8.0.1\build\native\bin\Win32\v141\dynamic\Debug\*.dll" "$(ProjectDir)$(OutDir)"
+xcopy /y /d  "$(SolutionDir)packages\glew-2.2.0\bin\Release\Win32\*.dll" "$(ProjectDir)$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -110,7 +129,14 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <FullProgramDatabaseFile>true</FullProgramDatabaseFile>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;freetype28d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\szymo\Documents\TGAPEngine\packages\freetype.2.8.0.1\build\native\lib\x64\v141\dynamic\Debug;C:\Users\szymo\Documents\TGAPEngine\packages\glfw.3.3.7\build\native\lib\dynamic\v143\x64;C:\Users\szymo\Documents\TGAPEngine\packages\glew-2.2.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d  "$(SolutionDir)packages\glfw.3.3.7\build\native\bin\dynamic\v143\x64\*.dll" "$(ProjectDir)$(OutDir)"
+xcopy /y /d  "$(SolutionDir)packages\freetype.redist.2.8.0.1\build\native\bin\x64\v141\dynamic\Debug\*.dll" "$(ProjectDir)$(OutDir)"
+xcopy /y /d  "$(SolutionDir)packages\glew-2.2.0\bin\Release\x64\*.dll" "$(ProjectDir)$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -122,6 +148,7 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <None Include="packages.config" />
     <None Include="res\test\a.bams" />
     <None Include="res\test\actionstest.bams">
       <DeploymentContent>false</DeploymentContent>
@@ -166,9 +193,6 @@
     <None Include="Shaders\texture.frag" />
     <None Include="Shaders\texture.vert" />
     <None Include="Shaders\vertex.vert" />
-    <None Include="src\Blender Scripts\io_export_bam.py" />
-    <None Include="src\Blender Scripts\io_export_scene_bam.py" />
-    <None Include="src\Blender Scripts\reg.py" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Action.h" />
@@ -264,5 +288,18 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\glfw.3.3.7\build\native\glfw.targets" Condition="Exists('..\packages\glfw.3.3.7\build\native\glfw.targets')" />
+    <Import Project="..\packages\glm.0.9.9.800\build\native\glm.targets" Condition="Exists('..\packages\glm.0.9.9.800\build\native\glm.targets')" />
+    <Import Project="..\packages\freetype.redist.2.8.0.1\build\native\freetype.redist.targets" Condition="Exists('..\packages\freetype.redist.2.8.0.1\build\native\freetype.redist.targets')" />
+    <Import Project="..\packages\freetype.2.8.0.1\build\native\freetype.targets" Condition="Exists('..\packages\freetype.2.8.0.1\build\native\freetype.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\glfw.3.3.7\build\native\glfw.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glfw.3.3.7\build\native\glfw.targets'))" />
+    <Error Condition="!Exists('..\packages\glm.0.9.9.800\build\native\glm.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glm.0.9.9.800\build\native\glm.targets'))" />
+    <Error Condition="!Exists('..\packages\freetype.redist.2.8.0.1\build\native\freetype.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\freetype.redist.2.8.0.1\build\native\freetype.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\freetype.2.8.0.1\build\native\freetype.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\freetype.2.8.0.1\build\native\freetype.targets'))" />
+  </Target>
 </Project>

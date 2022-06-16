@@ -49,6 +49,8 @@ void Material::loadShaders(const char * vertex_file_path,const char * fragment_f
             VertexShaderCode += "\n" + Line;
         VertexShaderStream.close();
     }
+    else
+        std::cout << "Error: " << strerror(errno);
 
     // Read the Fragment Shader code from the file
     std::string FragmentShaderCode;
@@ -59,6 +61,8 @@ void Material::loadShaders(const char * vertex_file_path,const char * fragment_f
             FragmentShaderCode += "\n" + Line;
         FragmentShaderStream.close();
     }
+    else
+        std::cout << "Error: " << strerror(errno);
 
     GLint Result = GL_FALSE;
     int InfoLogLength;

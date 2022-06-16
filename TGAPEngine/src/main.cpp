@@ -52,14 +52,14 @@ int main(){
 	//engine::Scene * scene1 = bam.loadScene("fisf5.bams", NULL);
 	engine::Scene * scene = new engine::Scene;
 	
-	engine::Scene * sceneActionTest = bam.loadScene("C:\\Users\\Szymon\\Documents\\TGAPEngine\\Debug\\aquarium3.bams", false);
+	engine::Scene * sceneActionTest = bam.loadScene("C:\\Users\\szymo\\Documents\\TGAPEngine\\TGAPEngine\\TGAPEngineTargetDirectory\\aquarium3.bams", false);
 	mr->setActiveScene(sceneActionTest);
 
 	engine::AnimatedActor * cube = (engine::AnimatedActor *)sceneActionTest->findEntityByName("Cube");
 	//engine::Armature * armature = cube->getArmature();
 	/*engine::Action * action = armature->getActionByName("Bow");
 	armature->applyAction(action, 1);*/
-	SingleMatrixMaterial * mat = new SingleMatrixMaterial("C:\\Users\\Szymon\\Documents\\TGAPEngine\\TGAPEngine\\Shaders\\vertex.vert", "C:\\Users\\Szymon\\Documents\\TGAPEngine\\TGAPEngine\\Shaders\\fragment.frag");
+	SingleMatrixMaterial * mat = new SingleMatrixMaterial("C:\\Users\\szymo\\Documents\\TGAPEngine\\TGAPEngine\\Shaders\\vertex.vert", "C:\\Users\\szymo\\Documents\\TGAPEngine\\TGAPEngine\\Shaders\\fragment.frag");
 	cube->entityMaterial = mat;
 	mat->setUniformSampler(1);
 	mat->setUniformAmbient(glm::vec4(0.3f, 0.3f, 0.3f, 1.0f));
@@ -207,6 +207,10 @@ int main(){
 		timePassed = timeE - timeS;
 		//std::cout << 1 / timePassed << std::endl;
 		timeS = glfwGetTime();
+		float xLocation = sin(time);
+		float zLocation = cos(time);
+		//mc->applyTranslation(glm::vec3(0.0f, 0.0f, 1.0f) * timePassed);
+		mc->setLocation(glm::vec3(xLocation, xLocation, zLocation) * 10.0f);
 		//fps->simulate(timePassed);
 		//std::cout << fps->getParticleCount() << std::endl;
 		/*if (time >= 8000){

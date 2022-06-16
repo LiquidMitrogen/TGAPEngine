@@ -29,6 +29,15 @@ void convolute(float* a, unsigned int al, float* b, unsigned int bl, float* out)
         }
     }
 }
+void blackmanWindowGen(float* out, unsigned int totalLen)
+{
+    //do generowania funkcji okna
+    //Test OK
+    unsigned int i;
+    for (i = 0; i < totalLen; i++) {
+        out[i] = 0.42 - 0.5 * cos(M_PI * 2 * i / (totalLen - 1)) + 0.08 * cos(M_PI * 4 * i / (totalLen - 1));
+    }
+}
 void lowPassGen(float* out, unsigned int len, float cutoffFreq)
 {
     unsigned int i;
@@ -59,15 +68,7 @@ void lowPassGen(float* out, unsigned int len, float cutoffFreq)
         ri++;
     }
 }
-void blackmanWindowGen(float* out, unsigned int totalLen)
-{
-    //do generowania funkcji okna
-    //Test OK
-    unsigned int i;
-    for(i=0;i<totalLen;i++){
-        out[i]= 0.42 - 0.5 * cos(M_PI * 2 * i / (totalLen-1)) + 0.08 * cos(M_PI * 4 *i/(totalLen-1));
-    }
-}
+
 
 
 void envelopeRectifier(float* in, unsigned int inLength, float* lowPass, unsigned int lowPassLength, float* out)

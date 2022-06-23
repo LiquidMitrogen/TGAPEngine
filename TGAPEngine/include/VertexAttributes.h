@@ -26,6 +26,7 @@ class VertexAttributes
         virtual ~VertexAttributes();
         void use();
         unsigned int indiceCount;
+        GLenum indiceType;
 		void updateBuffer(char * data, unsigned int offset, unsigned int size);
     protected:
     private:

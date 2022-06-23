@@ -25,7 +25,7 @@ ActorTextureMatrixMaterial::ActorTextureMatrixMaterial(const char * vertex_file_
     setUniformLightDir2(worldToCamera * light2);
 
     GLint * tempBoneUnif;
-    tempBoneUnif = new GLint[14];
+    tempBoneUnif = new GLint[18];
 	if (DEBUG_MODE == 1){
 		std::cout << "new ActorTextureMatrixMaterial" << std::endl;
 	}

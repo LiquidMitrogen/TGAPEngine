@@ -41,7 +41,7 @@ VertexAttributes::~VertexAttributes()
 }
 void VertexAttributes::createBuffer(std::vector<char> data, std::vector<unsigned short> iData)
 {
-
+    indiceType = GL_UNSIGNED_SHORT;
     glGenBuffers(1,&this->vboBuffer);
     glBindBuffer(GL_ARRAY_BUFFER,this->vboBuffer);
     glBufferData(GL_ARRAY_BUFFER,data.size()*sizeof(char),&data.front(),GL_STATIC_DRAW);
@@ -56,7 +56,7 @@ void VertexAttributes::createBuffer(std::vector<char> data, std::vector<unsigned
 }
 void VertexAttributes::createBuffer(std::vector<char> data, std::vector<unsigned int> iData)
 {
-
+    indiceType = GL_UNSIGNED_INT;
     glGenBuffers(1,&this->vboBuffer);
     glBindBuffer(GL_ARRAY_BUFFER,this->vboBuffer);
     glBufferData(GL_ARRAY_BUFFER,data.size()*sizeof(char),&data.front(),GL_STATIC_DRAW);

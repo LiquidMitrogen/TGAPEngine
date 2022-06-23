@@ -26,12 +26,12 @@ SingleMatrixMaterial::SingleMatrixMaterial(const char * vertex_file_path,const c
 	setUniformSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
 	setUniformShininess(128.0f);
 	GLint * tempBoneUnif;
-	tempBoneUnif = new GLint[14];
+	tempBoneUnif = new GLint[18];
 	if (DEBUG_MODE == 1){
 		std::cout << "new SingleMat" << std::endl;
 	}
 	int i;
-	for (i = 0; i<14; i++){
+	for (i = 0; i<18; i++){
 		char buffer[50];
 		sprintf(buffer, "bone[%d]", i);
 		//std::cout<<buffer<<std::endl;

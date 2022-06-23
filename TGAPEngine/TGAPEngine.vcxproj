@@ -67,7 +67,7 @@
     </Linkage-freetype>
     <Linkage-glew>
     </Linkage-glew>
-    <ExternalIncludePath>C:\Users\szymo\Documents\TGAPEngine\packages\glew-2.2.0\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>C:\Users\szymo\Documents\TGAPEngine\packages\JSON\single_include;C:\Users\szymo\Documents\TGAPEngine\packages\glew-2.2.0\include;$(ExternalIncludePath)</ExternalIncludePath>
     <IncludePath>$(SolutionDir)TGAPEngine\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -91,6 +91,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -206,7 +207,9 @@ xcopy /y /d  "$(SolutionDir)packages\glew-2.2.0\bin\Release\x64\*.dll" "$(Projec
     <ClInclude Include="include\Config.h" />
     <ClInclude Include="include\DrawingContext.h" />
     <ClInclude Include="include\Entity.h" />
+    <ClInclude Include="include\FileReaderGlTF.h" />
     <ClInclude Include="include\FontRasterizer.h" />
+    <ClInclude Include="include\GlTFJsonRepresentation.h" />
     <ClInclude Include="include\GuiUtility.h" />
     <ClInclude Include="include\Image.h" />
     <ClInclude Include="include\Keyframe.h" />
@@ -241,7 +244,9 @@ xcopy /y /d  "$(SolutionDir)packages\glew-2.2.0\bin\Release\x64\*.dll" "$(Projec
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\DrawingContext.cpp" />
     <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\FileReaderGlTF.cpp" />
     <ClCompile Include="src\FontRasterizer.cpp" />
+    <ClCompile Include="src\GlTFJsonRepresentation.cpp" />
     <ClCompile Include="src\GuiUtility.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Keyframe.cpp" />

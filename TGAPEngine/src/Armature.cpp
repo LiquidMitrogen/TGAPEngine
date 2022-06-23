@@ -13,27 +13,31 @@ namespace engine{
 	}
 
 	void Armature::modifyArmatureUniforms(GLint * boneUniforms){
-		this->rootBone->modifyBoneUnif(boneUniforms);
+		this->rootBone->modifyBoneUnif(boneUniforms, glm::mat4(1.0f));
 	}
 
 
 	Bone * Armature::findBoneByName(std::string boneName){
 		return this->rootBone->findBoneByName(boneName);
 	}
-	Action * Armature::getActionByName(std::string actionName){
-		for (std::vector<Action>::iterator it = this->actions.begin(); it != this->actions.end(); it++){
-			if ((*it).name == actionName) return &(*it);
+	Action<float>* Armature::getActionByName(std::string actionName){
+		for (std::vector<Action<float>*>::iterator it = this->actions.begin(); it != this->actions.end(); it++){
+			if ((*it)->name == actionName) return (*it);
 		}
 		return nullptr;
 	}
-	void Armature::applyActionByName(std::string actionName, unsigned int frame){
+	void Armature::applyActionByName(std::string actionName, float time){
 		//BUG!
-		for (std::vector<Action>::iterator it = this->actions.begin(); it != this->actions.end(); it++){
-			this->rootBone->applyAction(&(*it), frame);
+		for (std::vector<Action<float>*>::iterator it = this->actions.begin(); it != this->actions.end(); it++){
+			if ((*it)->name == actionName)
+			{
+				this->rootBone->applyAction((*it), time);
+				return;
+			}
 		}
 	}
-	void Armature::applyAction(Action * action, unsigned int frame){
-		this->rootBone->applyAction(action, frame);
+	void Armature::applyAction(Action<float>* action, float time){
+		this->rootBone->applyAction(action, time);
 	}
 
 

@@ -16,6 +16,7 @@
 #include "ParticleSystem.h"
 #include "Scene.h"
 #include "Armature.h"
+#include "FileReaderGlTF.h"
 
 
 
@@ -37,10 +38,11 @@ void mouseButtCallback(GLFWwindow *window, int button, int action, int mods){
 int main(){
 
 
-	engine::BamFileReader bam;
+	//engine::BamFileReader bam;
+	engine::FileReaderGlTF gltfReader;
 	engine::MainEngine me(800,600);
 	//engine::Camera * mc = new engine::Camera(glm::perspective(1.182664626f, 9.0f / 6.0f, 1.0f, 750.0f), glm::vec3(1.0f, 1.0f, 2.0f), glm::vec3(1.0f, 1.0f, -2.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	engine::Camera * mc = engine::Camera::perspectiveCamera(1.182664626f, 9.0f / 6.0f, 1.0f, 750.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	engine::Camera * mc = engine::Camera::perspectiveCamera(1.182664626f, 9.0f / 6.0f, 1.0f, 750.0f, 0.0f, 0.0f, 5.0f, 0.0f, 5.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 	engine::Light * mdlight = new engine::Light(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,true);
 	engine::Light * mdlight2 = new engine::Light(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, false);
 	engine::Light * mdlight3 = new engine::Light(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, false);
@@ -51,21 +53,33 @@ int main(){
 
 	//engine::Scene * scene1 = bam.loadScene("fisf5.bams", NULL);
 	engine::Scene * scene = new engine::Scene;
+	engine::Scene * gltf = gltfReader.loadScene("C:\\Users\\szymo\\Documents\\TGAPEngine\\TGAPEngine\\TGAPEngineTargetDirectory\\animated.gltf", false);
+	//engine::Scene * gltf = gltfReader.loadScene("C:\\Users\\szymo\\Documents\\TGAPEngine\\TGAPEngine\\TGAPEngineTargetDirectory\\DamagedHelmet.gltf", false);
+	//engine::Scene * gltf = gltfReader.loadScene("C:\\Users\\szymo\\Documents\\TGAPEngine\\TGAPEngine\\TGAPEngineTargetDirectory\\ts\\scene.gltf", false);
+	//engine::Scene * gltf = gltfReader.loadScene("C:\\Users\\szymo\\Documents\\TGAPEngine\\TGAPEngine\\TGAPEngineTargetDirectory\\ts\\reex.gltf", false);
+	mr->setActiveScene(gltf);
+	//engine::Scene * sceneActionTest = bam.loadScene("C:\\Users\\szymo\\Documents\\TGAPEngine\\TGAPEngine\\TGAPEngineTargetDirectory\\animatedactions.bams", false);
+	//engine::Scene * sceneActionTest = bam.loadScene("C:\\Users\\szymo\\Documents\\TGAPEngine\\TGAPEngine\\TGAPEngineTargetDirectory\\aquarium3.bams", false);
+	//mr->setActiveScene(sceneActionTest);
+	//gltf->addEntity(sceneActionTest->findEntityByName("Plane"));
+	engine::AnimatedActor * human = (engine::AnimatedActor *)gltf->findEntityByName("Human");
+	engine::Armature * armature = human->getArmature();
+	//engine::Bone * lowerArm = armature->findBoneByName("LowerArm.L");
+	//engine::Bone * pectoral = armature->findBoneByName("Pectoral.R");
+	//engine::Bone * chest = armature->findBoneByName("Chest");
+	//bonePtr->setQuaternion(glm::angleAxis((float)M_PI / 4.0f, glm::vec3(1.0f, 0.0f, 0.0f)));
 	
-	engine::Scene * sceneActionTest = bam.loadScene("C:\\Users\\szymo\\Documents\\TGAPEngine\\TGAPEngine\\TGAPEngineTargetDirectory\\aquarium3.bams", false);
-	mr->setActiveScene(sceneActionTest);
-
-	engine::AnimatedActor * cube = (engine::AnimatedActor *)sceneActionTest->findEntityByName("Cube");
-	//engine::Armature * armature = cube->getArmature();
-	/*engine::Action * action = armature->getActionByName("Bow");
-	armature->applyAction(action, 1);*/
+	
+	//bonePtr->applyRotationToBoneAtFrame(bonePtr, 1, glm::angleAxis((float)M_PI / 4.0f, glm::vec3(0.0f, 1.0f, 0.0f)));
+	engine::Action<float> * action = armature->getActionByName("Sit");
+	
 	SingleMatrixMaterial * mat = new SingleMatrixMaterial("C:\\Users\\szymo\\Documents\\TGAPEngine\\TGAPEngine\\Shaders\\vertex.vert", "C:\\Users\\szymo\\Documents\\TGAPEngine\\TGAPEngine\\Shaders\\fragment.frag");
-	cube->entityMaterial = mat;
+	/*cube->entityMaterial = mat;
 	mat->setUniformSampler(1);
 	mat->setUniformAmbient(glm::vec4(0.3f, 0.3f, 0.3f, 1.0f));
 	mat->setUniformColor(glm::vec4(1.0f, 0.1f, 0.8f, 1.0f));
 	mat->setUniformShininess(128.0f);
-	mat->setUniformSpecular(glm::vec4(0.5f, 0.5f, 0.5f,1.0f));
+	mat->setUniformSpecular(glm::vec4(0.5f, 0.5f, 0.5f,1.0f));*/
 	//e->applyTranslation(glm::vec3(0.0f, 0.0,0.0));
 	//e->applyRotation(glm::angleAxis((float)M_PI, glm::vec3(0.0f, 1.0f, 0.0)));
 
@@ -75,7 +89,6 @@ int main(){
 	//engine::Image * cimg = new engine::Image(cbit, info.width, info.height, 1, GL_RGB, TG_FILTER_LINEAR, true);
 
 	//engine::AnimatedActor * e = (engine::AnimatedActor*) bam.loadEntity("bnbn.bam");
-	//engine::Bone * bonePtr = e->getArmature()->findBoneByName("Neck");
 	//e->resetLocation();
 	//e->resetRotation();
 	//e->applyRotation(glm::angleAxis((float)glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
@@ -202,15 +215,30 @@ int main(){
 	double timeS = 0, timeE = 0;
 	float timePassed = 0;
 	float lastTime = 0;
+	//auto chestOriginalRotation = chest->getQuaternion();
+	//auto lowerArmOriginalRotation = lowerArm->getQuaternion();
+	//auto pectoralOriginalRotation = pectoral->getQuaternion();
+	auto timeForAction = 0.0f;
 	//unsigned int frame = action->rangeStart;
 	while (!glfwWindowShouldClose(me.getWindow())){
 		timePassed = timeE - timeS;
 		//std::cout << 1 / timePassed << std::endl;
 		timeS = glfwGetTime();
 		float xLocation = sin(time);
-		float zLocation = cos(time);
+		float yLocation = sin(time * 1.2f);
+		float zLocation = cos(time * 0.9f);
+		mdlight->setLocation(glm::vec4(xLocation * 10.0f, yLocation * 10.0f, zLocation * 10.0f, 1.0f));
+		mdlight2->setLocation(glm::vec4(yLocation * 10.0f, zLocation * 10.0f, xLocation * 10.0f, 1.0f));
+		mdlight3->setLocation(glm::vec4(zLocation * 10.0f, xLocation * 10.0f, yLocation * 10.0f, 1.0f));
 		//mc->applyTranslation(glm::vec3(0.0f, 0.0f, 1.0f) * timePassed);
-		mc->setLocation(glm::vec3(xLocation, xLocation, zLocation) * 10.0f);
+		mc->setLocation(glm::vec3(xLocation, yLocation, zLocation) * 10.0f);
+		//chest->setQuaternion(chestOriginalRotation);
+		//lowerArm->setQuaternion(lowerArmOriginalRotation);
+		//pectoral->setQuaternion(pectoralOriginalRotation);
+		timeForAction += timePassed;
+		while(timeForAction > action->rangeEnd)
+			timeForAction -= action->rangeEnd - action->rangeStart;
+		armature->applyAction(action, timeForAction);
 		//fps->simulate(timePassed);
 		//std::cout << fps->getParticleCount() << std::endl;
 		/*if (time >= 8000){
@@ -220,6 +248,10 @@ int main(){
 		tmpsc = (time / 8000) * M_PI * 2;*/
 		if (mouseDown == true){
 			//mouseDown = false;
+			//chest->applyArmatureRotation(glm::angleAxis(((float)M_PI / 4.0f) * (xLocation), glm::vec3(1.0f, 0.0f, 0.0f)));
+			//lowerArm->applyArmatureRotation(glm::angleAxis(((float)M_PI / 4.0f) * (yLocation), glm::vec3(1.0f, 0.0f, 0.0f)));
+			//pectoral->applyArmatureRotation(glm::angleAxis(((float)M_PI / 4.0f) * (yLocation), glm::vec3(0.0f, 1.0f, 0.0f)));
+
 			glfwGetCursorPos(me.getWindow(), &xpos, &ypos);
 			glfwGetWindowSize(me.getWindow(), &x, &y);
 			float xmouse = (xpos / x) * 2 - 1;

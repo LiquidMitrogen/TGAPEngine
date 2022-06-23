@@ -223,7 +223,7 @@ void Entity::draw(glm::mat4 parentMatrix, DrawingContext * context)
 		if (this->disableDepthTests){
 			glDisable(GL_DEPTH_TEST);
 		}
-		glDrawElements(GL_TRIANGLES, vertexAttributeBuf->indiceCount, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, vertexAttributeBuf->indiceCount, vertexAttributeBuf->indiceType, 0);
 
 		cleanUp();
 		if (this->disableDepthTests){

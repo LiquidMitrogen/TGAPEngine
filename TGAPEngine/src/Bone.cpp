@@ -20,29 +20,47 @@ Bone::Bone(BoneStruct bones[], unsigned int thisIndex):index(thisIndex)
         children.emplace_back(boneTmp);
     }
 }
-void Bone::applyAction(Action * action, unsigned int frame){
+Bone::Bone(unsigned int thisIndex, int nodeIndex, glm::mat4* invMat, std::string name):index(thisIndex), nodeIndex(nodeIndex), invertedBoneMat(invMat), name(name)
+{
+
+	this->boneLocation = glm::vec3(0.0f, 0.0f, 0.0f);
+	this->boneQuaternion = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+	this->boneNeedsUniformUpdate = true;
+}
+void Bone::applyAction(Action<float> * action, float time){
 	this->boneNeedsUniformUpdate = true;
 
-	Keyframe keyframe = action->getQuatLoc(this->index, frame);
-	this->boneQuaternion = keyframe.quaternion;
-	this->boneLocation = keyframe.location;
+	auto quaternion =  action->getQuat(this->nodeIndex, time);
+	auto location =  action->getLoc(this->nodeIndex, time);
+	if(quaternion.has_value())
+		this->boneQuaternion = quaternion.value();
+	if (location.has_value())
+		this->boneLocation = location.value();
 
 	for (std::list<std::unique_ptr<Bone>>::iterator it = this->children.begin(); it != this->children.end(); ++it){
 
-		(*it)->applyAction(action, frame);
+		(*it)->applyAction(action, time);
 
 	}
 }
-void Bone::modifyBoneUnif(GLint* boneUnifArray)
+void Bone::modifyBoneUnif(GLint* boneUnifArray, glm::mat4 parentTransform)
 {
+	glm::mat4 originToLoc = glm::translate(glm::mat4(1.0f), this->boneLocation);
+	glm::mat4 rotateMatrix = glm::mat4_cast(this->boneQuaternion);
+	auto newParentTransform = parentTransform * originToLoc * rotateMatrix;
 
 	if (this->boneNeedsUniformUpdate == true){
 		this->boneNeedsUniformUpdate = false;
-		glm::mat4 originToLoc = glm::translate(glm::mat4(1.0f), this->boneLocation);
-		glm::mat4 rotateMatrix = glm::mat4_cast(this->boneQuaternion);
 
 		glm::mat4 * matrix = new glm::mat4(1.0f);
-		*matrix = originToLoc* rotateMatrix * (*this->invertedBoneMat) *  (*matrix);
+		//glm::vec4 test(4.38f, 6.39f, 0.21f, 1.0f);
+		//std::cout << test.x << "  " << test.y << "  " << test.z << "  " << this->name << std::endl;
+		//auto tes2 = (*this->invertedBoneMat) * test;
+		//std::cout << tes2.x<<"  "<< tes2.y <<"  "<< tes2.z << "  " << this->name << std::endl;
+		//auto tes3 = newParentTransform * tes2;
+		//std::cout << tes3.x << "  " << tes3.y << "  " << tes3.z << "  " << this->name << std::endl;
+		*matrix = newParentTransform * (*this->invertedBoneMat) *  (*matrix);
+		//auto tes4 = *matrix * test;
 		const float *pSource = (const float*)glm::value_ptr(*matrix);
 		glUniformMatrix4fv(boneUnifArray[this->index], 1, GL_FALSE, pSource);
 		delete matrix;
@@ -50,7 +68,7 @@ void Bone::modifyBoneUnif(GLint* boneUnifArray)
 
     for (std::list<std::unique_ptr<Bone>>::iterator it = this->children.begin() ; it != this->children.end(); ++it){
 
-        (*it)->modifyBoneUnif(boneUnifArray);
+        (*it)->modifyBoneUnif(boneUnifArray, newParentTransform);
 
     }
     
@@ -148,9 +166,9 @@ void Bone::applyChildrenTransformation(glm::vec3 location, glm::quat rotation){
 
 	for (std::list<std::unique_ptr<Bone>>::iterator it = this->children.begin(); it != this->children.end(); ++it){
 		(*it)->boneNeedsUniformUpdate = true;
-		glm::quat old = (*it)->getQuaternion();
-		(*it)->setQuaternion(rotation * old);
-		(*it)->rotateLocationAroundAPointForFrame(location, rotation);
+		//glm::quat old = (*it)->getQuaternion();
+		//(*it)->setQuaternion(rotation * old);
+		//(*it)->rotateLocationAroundAPointForFrame(location, rotation);
 		(*it)->applyChildrenTransformation(location, rotation);
 
 	}

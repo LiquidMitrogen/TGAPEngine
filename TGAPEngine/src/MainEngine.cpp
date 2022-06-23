@@ -116,6 +116,7 @@ int MainEngine::initialise(unsigned int width, unsigned int height)
     glfwSetErrorCallback(error_callback);
 	glfwWindowHint(GLFW_SRGB_CAPABLE, GL_TRUE);
 	glfwWindowHint(GLFW_SAMPLES, 4);
+    //glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 	
 	this->m_window = glfwCreateWindow(Window::m_width, Window::m_height, "App", NULL, NULL);
 	int mj, mi, rev;
@@ -215,7 +216,7 @@ vid2.attrType[0]=GL_FLOAT;
 
 */
 
-engine::BamFileReader bam;
+//engine::BamFileReader bam;
 
 //engine::VertexAttributes * vaa;
 //vaa = new VertexAttributes(poses,indyki,vid2);

@@ -34,9 +34,10 @@ class Bone
 {
     public:
         Bone(BoneStruct bones[], unsigned int thisIndex);
+        Bone(unsigned int thisIndex, int nodeIndex, glm::mat4* invMat, std::string name);
         virtual ~Bone(){};
-		void applyAction(Action * action, unsigned int frame);
-        void modifyBoneUnif(GLint * boneUnifArray);
+		void applyAction(Action<float>* action, float time);
+        void modifyBoneUnif(GLint * boneUnifArray, glm::mat4 parentTransform);
 		std::string getName(){
 			return this->name;
 		};
@@ -58,16 +59,17 @@ class Bone
 
 
 		void applyArmatureRotation(glm::quat rotation);
+        std::list<std::unique_ptr<Bone>> children;
 
     protected:
 		void applyChildrenTransformation(glm::vec3 location, glm::quat rotation);
 		void rotateLocationAroundAPointForFrame(glm::vec3 location, glm::quat rotation);
 		std::string name;
         unsigned int index;
+		int nodeIndex;
         glm::mat4 * invertedBoneMat;
 		glm::quat boneQuaternion;
 		glm::vec3 boneLocation;
-        std::list<std::unique_ptr<Bone>> children;
 
 		bool boneNeedsUniformUpdate = true;
     private:

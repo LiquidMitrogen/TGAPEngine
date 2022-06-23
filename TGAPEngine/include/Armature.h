@@ -15,20 +15,20 @@ namespace engine{
 		Armature(Bone * rootBone) :Entity(nullptr),rootBone(rootBone){};
 		~Armature();
 
-		void addAction(Action action){
+		void addAction(Action<float>* action){
 
 			this->actions.push_back(action);
 		}
 
 		Bone * findBoneByName(std::string boneName);
-		Action * getActionByName(std::string actionName);
-		void applyActionByName(std::string actionName, unsigned int frame);
-		void applyAction(Action * action, unsigned int frame);
+		Action<float>* getActionByName(std::string actionName);
+		void applyActionByName(std::string actionName, float time);
+		void applyAction(Action<float>* action, float time);
 
 		void applyRotationToBone(Bone * bone, glm::quat quaternion);
 		void modifyArmatureUniforms(GLint * boneUniforms);
 	protected:
-		std::vector<Action> actions;
+		std::vector<Action<float>*> actions;
 		Bone * rootBone;
 	};
 }

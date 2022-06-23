@@ -3,14 +3,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 namespace engine{
+	template <class T, class V>
 	class Keyframe
 	{
 	public:
-		Keyframe(unsigned int index, glm::vec3 location, glm::quat quaternion);
-		~Keyframe();
+	Keyframe(T time, V value) : time(time), value(value) {}
+	~Keyframe() {}
 
-		unsigned int frame;
-		glm::quat quaternion;
-		glm::vec3 location;
+		T time;
+		V value;
 	};
 }
